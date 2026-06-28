@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Computer Graphics Study Hub (Unit I & II)</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="app-header">
+    <div class="header-logo">
+      <span class="logo-icon">🖥️</span>
+      <div class="logo-text">
+        <h1>CG Exam Hub</h1>
+        <p>Unit I & II Master Class</p>
+      </div>
+    </div>
+    
+    <nav class="app-nav">
+      <button class="nav-btn active" data-tab="slides" id="nav-slides">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2zm0 8H7v-2h10v2z"/></svg>
+        Presentation Slides
+      </button>
+      <button class="nav-btn" data-tab="flashcards" id="nav-flashcards">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+        Study Flashcards
+      </button>
+      <button class="nav-btn" data-tab="visualizers" id="nav-visualizers">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+        Algorithm Visualizers
+      </button>
+    </nav>
+
+    <div class="exam-countdown" id="countdown-timer">
+      <span class="countdown-label">Exam in:</span>
+      <span class="countdown-val">Loading...</span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-container">
+    
+    <!-- 1. SLIDES SECTION -->
+    <section id="slides-section" class="tab-content active">
+      <div class="slides-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="slides-sidebar">
+          <h3>Table of Contents</h3>
+          <ul class="slide-list" id="slide-list-nav">
+            <!-- Dynamically populated via JS -->
+          </ul>
+        </aside>
+        
+        <!-- Slide Content Area -->
+        <article class="slide-viewer">
+          <div class="slide-container" id="slide-container">
+            <!-- Dynamically populated via JS -->
+          </div>
+          
+          <div class="slide-controls">
+            <button class="control-btn" id="prev-slide" title="Press Left Arrow">
+              <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+              Prev
+            </button>
+            <div class="slide-progress-info">
+              <span id="current-slide-num">1</span> / <span id="total-slide-num">12</span>
+              <div class="slide-progress-bar-container">
+                <div class="slide-progress-bar" id="slide-progress-bar"></div>
+              </div>
+            </div>
+            <button class="control-btn" id="next-slide" title="Press Right Arrow">
+              Next
+              <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 2. FLASHCARDS SECTION -->
+    <section id="flashcards-section" class="tab-content">
+      <div class="flashcards-layout">
+        <div class="flashcards-sidebar">
+          <h3>Study Progress</h3>
+          <div class="progress-stats-box">
+            <div class="stat-item">
+              <span class="stat-label">Total Cards</span>
+              <span class="stat-value" id="card-total-count">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Mastered</span>
+              <span class="stat-value text-success" id="card-mastered-count">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">To Review</span>
+              <span class="stat-value text-warning" id="card-review-count">0</span>
+            </div>
+          </div>
+          
+          <div class="progress-bar-circle-wrapper">
+            <svg class="progress-ring" width="120" height="120">
+              <circle class="progress-ring__circle-bg" stroke="#1f242d" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+              <circle class="progress-ring__circle" id="flashcard-radial-progress" stroke="var(--primary-color)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+            </svg>
+            <div class="progress-percentage" id="flashcard-pct-text">0%</div>
+          </div>
+          
+          <button class="btn btn-secondary btn-full" id="reset-cards-btn">
+            Reset Progress
+          </button>
+        </div>
+
+        <div class="flashcard-container">
+          <div class="flashcard-wrapper" id="flashcard-wrapper">
+            <!-- Card itself -->
+            <div class="flashcard" id="flashcard">
+              <div class="flashcard-front">
+                <span class="card-category" id="card-cat-front">Category</span>
+                <div class="card-content-text" id="card-question">
+                  Loading question...
+                </div>
+                <div class="card-hint">
+                  <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                  Click card to flip
+                </div>
+              </div>
+              <div class="flashcard-back">
+                <span class="card-category" id="card-cat-back">Category - Answer</span>
+                <div class="card-content-text" id="card-answer">
+                  Loading answer...
+                </div>
+                <div class="card-hint">
+                  Click card to flip back
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flashcard-controls">
+            <button class="study-btn btn-danger" id="card-btn-review" disabled>
+              ❌ Hard / Need Review
+            </button>
+            <button class="study-btn btn-success" id="card-btn-master" disabled>
+              ✅ Got It / Mastered
+            </button>
+          </div>
+
+          <div class="card-deck-nav">
+            <button class="nav-arrow-btn" id="prev-card">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </button>
+            <span class="card-index-info" id="card-index-indicator">Card 1 of 12</span>
+            <button class="nav-arrow-btn" id="next-card">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISUALIZERS SECTION -->
+    <section id="visualizers-section" class="tab-content">
+      <div class="visualizer-layout">
+        <!-- Sidebar Controls -->
+        <div class="visualizer-controls-panel">
+          <h3>Algorithm Settings</h3>
+          <div class="form-group">
+            <label for="algo-select">Select Algorithm</label>
+            <select id="algo-select" class="form-control">
+              <optgroup label="Unit-II: Line Drawing">
+                <option value="line-dda" selected>DDA Line Algorithm</option>
+                <option value="line-bresenham">Bresenham's Line Algorithm</option>
+              </optgroup>
+              <optgroup label="Unit-II: Circle / Ellipse">
+                <option value="circle-midpoint">Midpoint Circle Drawing</option>
+                <option value="ellipse-midpoint">Midpoint Ellipse Drawing</option>
+              </optgroup>
+              <optgroup label="Unit-II: Polygon Filling">
+                <option value="fill-boundary-4">Boundary-Fill (4-Connected)</option>
+                <option value="fill-boundary-8">Boundary-Fill (8-Connected)</option>
+                <option value="fill-flood-4">Flood-Fill (4-Connected)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <!-- Line Coordinates Inputs -->
+          <div id="inputs-line" class="algo-inputs">
+            <div class="input-row">
+              <div class="form-group">
+                <label>Start X0</label>
+                <input type="number" id="line-x0" value="2" min="0" max="19" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>Start Y0</label>
+                <input type="number" id="line-y0" value="3" min="0" max="19" class="form-control">
+              </div>
+            </div>
+            <div class="input-row">
+              <div class="form-group">
+                <label>End X1</label>
+                <input type="number" id="line-x1" value="17" min="0" max="19" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>End Y1</label>
+                <input type="number" id="line-y1" value="14" min="0" max="19" class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <!-- Circle Coordinates Inputs -->
+          <div id="inputs-circle" class="algo-inputs hidden">
+            <div class="input-row">
+              <div class="form-group">
+                <label>Center Xc</label>
+                <input type="number" id="circle-xc" value="10" min="0" max="19" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>Center Yc</label>
+                <input type="number" id="circle-yc" value="10" min="0" max="19" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Radius R</label>
+              <input type="number" id="circle-r" value="7" min="1" max="9" class="form-control">
+            </div>
+          </div>
+
+          <!-- Ellipse Coordinates Inputs -->
+          <div id="inputs-ellipse" class="algo-inputs hidden">
+            <div class="input-row">
+              <div class="form-group">
+                <label>Center Xc</label>
+                <input type="number" id="ellipse-xc" value="10" min="0" max="19" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>Center Yc</label>
+                <input type="number" id="ellipse-yc" value="10" min="0" max="19" class="form-control">
+              </div>
+            </div>
+            <div class="input-row">
+              <div class="form-group">
+                <label>Rx (Horiz)</label>
+                <input type="number" id="ellipse-rx" value="8" min="2" max="9" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>Ry (Vert)</label>
+                <input type="number" id="ellipse-ry" value="5" min="2" max="9" class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <!-- Polygon Fill Inputs -->
+          <div id="inputs-fill" class="algo-inputs hidden">
+            <p class="input-note">
+              Draw a closed polygon on the grid by clicking empty pixels to set boundary cells (red). 
+              Then click inside the polygon to place the seed pixel (cyan) and press Play.
+            </p>
+            <div class="fill-action-buttons">
+              <button class="btn btn-secondary btn-sm" id="btn-draw-boundary">Set Boundary Mode</button>
+              <button class="btn btn-secondary btn-sm" id="btn-set-seed">Set Seed Mode</button>
+              <button class="btn btn-danger btn-sm" id="btn-clear-polygon">Clear Canvas</button>
+            </div>
+            <div class="fill-mode-indicator">
+              Current Pen: <span id="current-pen-indicator" class="badge bg-secondary">Drawing Boundary</span>
+            </div>
+          </div>
+
+          <!-- Animation & Execution Controls -->
+          <div class="visualizer-actions">
+            <button class="btn btn-primary" id="viz-btn-play">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="M8 5v14l11-7z"/></svg>
+              Auto Play
+            </button>
+            <button class="btn btn-secondary" id="viz-btn-step">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              Next Step
+            </button>
+            <button class="btn btn-danger" id="viz-btn-reset">
+              Reset Grid
+            </button>
+          </div>
+
+          <div class="speed-slider-group">
+            <label for="speed-range">Step Delay: <span id="speed-label">300ms</span></label>
+            <input type="range" id="speed-range" min="50" max="1500" value="300" step="50">
+          </div>
+
+          <div class="viz-legend">
+            <h4>Grid Legend:</h4>
+            <div class="legend-items">
+              <div class="legend-item"><span class="legend-color pixel-grid-bg"></span> Default Grid</div>
+              <div class="legend-item"><span class="legend-color pixel-plotted"></span> Plotted Pixel</div>
+              <div class="legend-item"><span class="legend-color pixel-current"></span> Current Working Cell</div>
+              <div class="legend-item"><span class="legend-color pixel-boundary"></span> Polygon Boundary</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Grid Visualizer -->
+        <div class="visualizer-display-panel">
+          <div class="grid-card">
+            <div class="grid-card-header">
+              <h3 id="visualizer-title">DDA Line Algorithm Visualizer</h3>
+              <div class="grid-resolution">Grid Resolution: 20 &times; 20 Pixels</div>
+            </div>
+            <div class="grid-viewport">
+              <div class="pixel-grid" id="pixel-grid">
+                <!-- Grid Cells populated via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Step Trace and Mathematics explanation -->
+          <div class="trace-card">
+            <h3>Algorithm Trace & Mathematics</h3>
+            <div class="trace-summary" id="trace-summary">
+              Initializing...
+            </div>
+            <div class="table-container">
+              <table class="trace-table" id="trace-table">
+                <thead>
+                  <tr id="trace-table-headers">
+                    <!-- Dynamic Headers -->
+                  </tr>
+                </thead>
+                <tbody id="trace-table-body">
+                  <!-- Dynamic trace logs -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>Created for Computer Graphics exam prep. Study hard, ace the concepts! &copy; 2026</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
