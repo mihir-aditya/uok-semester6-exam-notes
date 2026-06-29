@@ -1684,4 +1684,109 @@ a:hover {
   to { stroke-dashoffset: -20; }
 }
 
+/* ==========================================
+   7. ARTIFICIAL INTELLIGENCE VISUALIZERS STYLING
+   ========================================== */
+.ai-inputs-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background: rgba(0, 242, 254, 0.02);
+  border: 1px solid rgba(0, 242, 254, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+}
+.ai-inputs-panel .input-note {
+  border-left-color: var(--primary-color);
+}
+.ai-grid-cell {
+  background: #151b26;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.ai-grid-cell:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+.cell-start {
+  background: linear-gradient(135deg, #0070f3, #00dfd8) !important;
+  box-shadow: 0 0 8px rgba(0, 112, 243, 0.5);
+}
+.cell-target {
+  background: linear-gradient(135deg, #00ff87, #60efff) !important;
+  box-shadow: 0 0 8px rgba(0, 255, 135, 0.5);
+}
+.cell-wall {
+  background: #2d3748 !important;
+  border-color: #4a5568;
+}
+.cell-visited {
+  background: rgba(155, 81, 224, 0.4) !important;
+  animation: cellExplore 0.3s ease-out;
+}
+.cell-path {
+  background: linear-gradient(135deg, #ffb300, #ff0844) !important;
+  box-shadow: 0 0 8px rgba(255, 179, 0, 0.6);
+  animation: cellPathGlow 0.4s ease-out;
+}
+
+@keyframes cellExplore {
+  0% { transform: scale(0.3); background-color: rgba(0, 242, 254, 0.6); border-radius: 10px; }
+  50% { background-color: rgba(155, 81, 224, 0.8); }
+  100% { transform: scale(1.0); }
+}
+@keyframes cellPathGlow {
+  0% { transform: scale(1.2); }
+  100% { transform: scale(1.0); }
+}
+
+/* Minimax Tree nodes */
+.tree-node-circle {
+  fill: #151b26;
+  stroke: var(--color-text-secondary);
+  stroke-width: 2;
+  transition: all 0.3s ease;
+}
+.tree-node-circle.active {
+  stroke: var(--primary-color);
+  fill: rgba(0, 242, 254, 0.1);
+  filter: drop-shadow(0 0 4px var(--primary-color));
+}
+.tree-node-circle.pruned {
+  stroke: var(--danger-color);
+  opacity: 0.3;
+}
+.tree-link-line {
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 2;
+  transition: stroke 0.3s ease;
+}
+.tree-link-line.active {
+  stroke: var(--primary-color);
+}
+.tree-link-line.pruned {
+  stroke: var(--danger-color);
+  stroke-dasharray: 2;
+  opacity: 0.3;
+}
+.tree-node-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--color-text-primary);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.tree-node-text.pruned {
+  fill: var(--danger-color);
+  opacity: 0.3;
+}
+.tree-eval-label {
+  font-family: var(--font-main);
+  font-size: 8px;
+  fill: var(--color-text-muted);
+  text-anchor: middle;
+}
+
 

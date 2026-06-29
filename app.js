@@ -4313,6 +4313,1035 @@ function initStudyGuide() {
   };
 }
 
+// Cyber Security Slides Database
+const slidesDataAI = [
+  {
+    title: "Course Overview & Syllabus Map",
+    unit: "Intro",
+    content: `
+      <h2>Artificial Intelligence <span class="slide-unit-badge">IMCA603T</span></h2>
+      <p>Welcome! This section is structured to prepare you for the IMCA603T Artificial Intelligence exam, covering Units I and II in deep academic detail.</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>Unit-I: Introduction & Intelligent Agents</h4>
+          <ul class="slide-bullet-list">
+            <li><strong>AI Foundations:</strong> Definitions, Background, Applications, and historical viewpoints.</li>
+            <li><strong>Methodologies:</strong> Turing Test vs. Cognitive Modeling vs. Rational Agent approaches.</li>
+            <li><strong>Intelligent Agents:</strong> Agent structure (sensors, actuators, programs), behaviors, and environment classifications.</li>
+          </ul>
+        </div>
+        <div class="info-callout" style="border-left-color: var(--accent-purple);">
+          <h4 style="color: var(--accent-purple);">Unit-II: Problem Solving & Search</h4>
+          <ul class="slide-bullet-list">
+            <li><strong>Search Techniques:</strong> Uninformed Search (BFS, DFS) vs. Heuristics (Best-First, A*).</li>
+            <li><strong>Hill Climbing:</strong> Steepest-Ascent, Plateaus, Local Maxima traps.</li>
+            <li><strong>Game Trees:</strong> Min-Max game evaluation, Alpha-Beta pruning cutoffs.</li>
+            <li><strong>Problem Types:</strong> CSPs (N-Queens), Means-End Analysis.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <p>💡 <em>Toggle between slides, flashcards, textbook guide chapters, and interactive visualizers using the main menu above!</em></p>
+    `
+  },
+  {
+    title: "Syllabus Unit-I: Definition & Turing Test",
+    unit: "Unit-I",
+    content: `
+      <h2>What is AI & The Turing Test <span class="slide-unit-badge">Unit-I</span></h2>
+      <p><strong>Artificial Intelligence</strong> is the study of agents that receive percepts from the environment and perform actions rationally.</p>
+      
+      <div class="info-callout">
+        <h4>1. Turing Test (Alan Turing, 1950):</h4>
+        Designed to provide a satisfactory operational definition of intelligence. A human interrogator asks questions to two hidden entities (a human and a computer) via text terminal.
+        <br>If the interrogator cannot reliably tell the computer from the human after 5 minutes of questioning, the computer passes the test.
+        <br><strong>Capabilities Required to Pass:</strong>
+        <ul>
+          <li>Natural Language Processing (NLP) to communicate.</li>
+          <li>Knowledge Representation to store info.</li>
+          <li>Automated Reasoning to draw conclusions.</li>
+          <li>Machine Learning to adapt to new patterns.</li>
+        </ul>
+        <em>Total Turing Test:</em> Includes video/physical interaction, requiring Computer Vision and Robotics.
+      </div>
+
+      <div class="math-box">
+        <p><strong>2. Rational Agent Approach:</strong></p>
+        A <strong>Rational Agent</strong> is one that acts to achieve the best expected outcome (maximizing utility) based on its current knowledge. Unlike the Turing Test (which mimics human behavior, flaws included), rationality focuses on doing the *right thing* logically.
+      </div>
+    `
+  },
+  {
+    title: "Syllabus Unit-I: Intelligent Agents",
+    unit: "Unit-I",
+    content: `
+      <h2>Intelligent Agents Structure & Environment <span class="slide-unit-badge">Unit-I</span></h2>
+      <p>An <strong>Agent</strong> is anything that perceives its environment through sensors and acts upon it through actuators. Formula: <code>Agent = Architecture + Program</code>.</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>Agent Structure components:</h4>
+          <ul>
+            <li><strong>Sensors:</strong> Inputs from the world (e.g. cameras, keyboard, sonar).</li>
+            <li><strong>Actuators:</strong> Means to change the world (e.g. robot legs, screen print commands, motor wheels).</li>
+            <li><strong>Agent Program:</strong> The mapping algorithm translating percept history to actions.</li>
+          </ul>
+        </div>
+        <div class="info-callout" style="border-left-color: var(--accent-purple);">
+          <h4 style="color:var(--accent-purple);">PEAS Framework (Design Specifications):</h4>
+          <ul>
+            <li><strong>P - Performance Measure:</strong> Metrics determining agent success (e.g. safety, speed, fuel economy).</li>
+            <li><strong>E - Environment:</strong> Outer context (e.g. roads, weather, server states).</li>
+            <li><strong>A - Actuators:</strong> Manipulators (steering, display).</li>
+            <li><strong>S - Sensors:</strong> Inputs (GPS, speedometer).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="math-box">
+        <p><strong>Environment Classifications (Exam Essentials):</strong></p>
+        * **Observable vs. Partially Observable:** Are sensors capturing the complete world state?
+        <br>* **Deterministic vs. Stochastic:** Does the next state depend *only* on the current state and action?
+        <br>* **Episodic vs. Sequential:** Are current decisions independent of past choices?
+        <br>* **Static vs. Dynamic:** Can the environment change while the agent is calculating?
+        <br>* **Discrete vs. Continuous:** Are states and actions finite or infinite?
+      </div>
+    `
+  },
+  {
+    title: "Syllabus Unit-II: Search Techniques",
+    unit: "Unit-II",
+    content: `
+      <h2>Problem Solving & Search Techniques <span class="slide-unit-badge">Unit-II</span></h2>
+      <p>Problem-solving agents formulate goals and states to find sequences of actions representing paths to success.</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>Uninformed Search (Blind):</h4>
+          Lacks goal proximity information.
+          <ul>
+            <li><strong>Breadth-First Search (BFS):</strong> Explores layer-by-layer using a FIFO Queue. Guarantees the shortest path if step costs are equal. Space Complexity: $O(b^d)$ (high memory).</li>
+            <li><strong>Depth-First Search (DFS):</strong> Explores branch-by-branch using a LIFO Stack. Space Complexity: $O(b \cdot d)$ (low memory). Not optimal, can get trapped in infinite paths.</li>
+          </ul>
+        </div>
+        <div class="info-callout" style="border-left-color: var(--accent-purple);">
+          <h4 style="color:var(--accent-purple);">Informed Search (Heuristic):</h4>
+          Uses heuristics ($h(n)$) estimating cost to target.
+          <ul>
+            <li><strong>Greedy Best-First:</strong> Expands node closest to goal based *only* on heuristic: $f(n) = h(n)$. Fast but not optimal.</li>
+            <li><strong>A* Algorithm:</strong> Expands nodes minimizing total estimated path cost: $$f(n) = g(n) + h(n)$$ where $g(n)$ is actual cost from start to node $n$. Optimal and complete if $h(n)$ is admissible ($h(n) \le h^*(n)$).</li>
+          </ul>
+        </div>
+      </div>
+    `
+  },
+  {
+    title: "Syllabus Unit-II: Hill Climbing & Games",
+    unit: "Unit-II",
+    content: `
+      <h2>Hill Climbing & Adversarial Games <span class="slide-unit-badge">Unit-II</span></h2>
+      <p>Local search algorithms focus on finding peaks in state-space graphs, while adversarial searches compute optimal game moves.</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>Hill Climbing (Local Search):</h4>
+          An iterative loop that steps toward higher elevation (improvement) neighbors.
+          <br><strong>Vulnerabilities:</strong>
+          <ul>
+            <li>*Local Maxima:* Peaks that are higher than their neighbors but lower than the global peak.</li>
+            <li>*Plateaus:* Flat zones where all neighbors have equal elevation, stalling progress.</li>
+            <li>*Ridges:* Slopes that slope downwards in both directions, making traversal difficult.</li>
+          </ul>
+        </div>
+        <div class="info-callout" style="border-left-color: var(--accent-purple);">
+          <h4 style="color:var(--accent-purple);">Minimax & Alpha-Beta Pruning:</h4>
+          Used in 2-player games (Max vs. Min).
+          <ul>
+            <li><strong>Minimax:</strong> Recursively backs up game scores. Max chooses maximum child score; Min chooses minimum child score.</li>
+            <li><strong>Alpha-Beta Pruning:</strong> Cut off sub-trees that cannot affect the final minimax decision.
+              <br>• $\alpha$: Best value for Max along path ($-\infty$ start).
+              <br>• $\beta$: Best value for Min along path ($+\infty$ start).
+              <br>• Prune branch when $\beta \le \alpha$.
+            </li>
+          </ul>
+        </div>
+      </div>
+    `
+  }
+];
+
+// AI Flashcards Database
+const flashcardsDataAI = [
+  {
+    category: "Unit-I: AI Basics",
+    question: "Define the **Turing Test** and name the 4 capabilities required to pass it.",
+    answer: "The Turing Test determines if a computer can exhibit human-like intelligence. A computer passes if a human interrogator cannot distinguish it from a human after 5 minutes of text chat. Requires: 1) Natural Language Processing, 2) Knowledge Representation, 3) Automated Reasoning, 4) Machine Learning."
+  },
+  {
+    category: "Unit-I: Agents",
+    question: "Explain the **PEAS** framework for agent design.",
+    answer: "PEAS stands for:<ul><li><strong>P:</strong> Performance Measure (how agent success is measured)</li><li><strong>E:</strong> Environment (the physical/virtual world the agent operates in)</li><li><strong>A:</strong> Actuators (hardware/software mechanisms used to execute actions)</li><li><strong>S:</strong> Sensors (devices capturing world percept inputs)</li></ul>"
+  },
+  {
+    category: "Unit-II: Search",
+    question: "Why is the **A*** algorithm considered complete and optimal?",
+    answer: "A* expands nodes minimizing $f(n) = g(n) + h(n)$. It is complete and optimal if the heuristic $h(n)$ is **admissible** (never overestimates the true cost to the goal, i.e., $h(n) \le h^*(n)$) and **consistent** (satisfies triangle inequality $h(n) \le c(n,a,n') + h(n')$)."
+  },
+  {
+    category: "Unit-II: Search",
+    question: "Describe the three traps of **Hill Climbing** local search.",
+    answer: "<ul><li><strong>1. Local Maxima:</strong> A peak that is higher than neighboring states but lower than the global optimum. Agent gets stuck because all steps lead down.</li><li><strong>2. Plateaus:</strong> A flat state area where all neighbors have the same value, resulting in zero gradient.</li><li><strong>3. Ridges:</strong> Slopes rising in one direction but falling steeply on both sides, causing the agent to bounce back and forth.</li></ul>"
+  },
+  {
+    category: "Unit-II: Game Trees",
+    question: "Define **Alpha (α)** and **Beta (β)** in Game Playing, and state the pruning condition.",
+    answer: "<ul><li><strong>Alpha (α):</strong> The highest (best) value found so far for MAX along the path. Initialized to $-\infty$.</li><li><strong>Beta (β):</strong> The lowest (best) value found so far for MIN along the path. Initialized to $+\infty$.</li></ul>Pruning occurs (sub-trees are skipped) as soon as <strong>&beta; &le; &alpha;</strong>."
+  },
+  {
+    category: "Unit-II: Problem Solving",
+    question: "What is a **Constraint Satisfaction Problem (CSP)**?",
+    answer: "A CSP is a problem defined by a set of **Variables** ($V$), a set of **Domains** ($D$, values for variables), and a set of **Constraints** ($C$, restrictions on compatible values). Example: Map Coloring, Cryptarithmetic, Sudoku, N-Queens."
+  },
+  {
+    category: "Unit-II: Search",
+    question: "What is **Means-Ends Analysis (MEA)**?",
+    answer: "MEA is a problem-solving strategy that aims to resolve differences between the current state and the goal state. It identifies differences, selects **Operators** (actions) designed to reduce the largest difference, and applies them recursively."
+  }
+];
+
+// AI Study Guide Textbook Database
+const studyGuideDataAI = [
+  {
+    title: "1. AI Foundations & Agents",
+    content: `
+      <h2>Intelligent Agents & Turing Test</h2>
+      
+      <h3>1. Turing Test & Rationality:</h3>
+      <p>Alan Turing (1950) proposed an operational test of intelligence, sidestepping philosophical debates about "thinking machines":</p>
+      <ul>
+        <li><strong>Total Turing Test:</strong> Adds vision and physical manipulation capability to test sensory-motor skills, requiring robotics and computer vision.</li>
+        <li><strong>The Rational Agent Approach:</strong> Focuses on creating agents that act to achieve the best expected outcome based on percept history. This is mathematically and computationally cleaner than mimicking human behavior, which is often flawed or emotional.</li>
+      </ul>
+
+      <h3>2. PEAS Designing Matrix (Examples):</h3>
+      <div class="table-container">
+        <table class="trace-table" style="font-size:0.82rem; width:100%;">
+          <thead>
+            <tr>
+              <th>Agent Type</th>
+              <th>Performance (P)</th>
+              <th>Environment (E)</th>
+              <th>Actuators (A)</th>
+              <th>Sensors (S)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Autonomous Taxi</strong></td>
+              <td>Safety, speed, legal drive, passenger comfort.</td>
+              <td>Roads, traffic, pedestrians, weather.</td>
+              <td>Steering wheel, accelerator, brake, horn.</td>
+              <td>Cameras, LiDAR, GPS, sonar, speedometer.</td>
+            </tr>
+            <tr>
+              <td><strong>Spam Filter</strong></td>
+              <td>Minimize false positives and negatives.</td>
+              <td>Email server stream, inbox accounts.</td>
+              <td>Move to Spam folder, flag email, notify.</td>
+              <td>Text parser, header analyzer, sender IP lookup.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-callout" style="margin-top:1rem;">
+        <h4>Agent Architectures:</h4>
+        <ul>
+          <li><strong>Simple Reflex Agents:</strong> Select actions based *only* on the current percept (condition-action rules).</li>
+          <li><strong>Model-Based Reflex Agents:</strong> Keep track of the unobserved world state using an internal model of how the world works.</li>
+          <li><strong>Goal-Based Agents:</strong> Combine state tracking with goal descriptions to select actions that achieve desired outcomes.</li>
+          <li><strong>Utility-Based Agents:</strong> Use a utility function to rate states, letting them choose actions that maximize overall happiness/efficiency.</li>
+        </ul>
+      </div>
+    `
+  },
+  {
+    title: "2. BFS, DFS & A* Search",
+    content: `
+      <h2>Search Algorithms & Heuristics</h2>
+      <p>Search algorithms explore tree or grid states to find path sequences leading to goal nodes.</p>
+      
+      <h3>1. Comparison of Uninformed (Blind) Search:</h3>
+      <ul>
+        <li><strong>Breadth-First Search (BFS):</strong> Expands the shallowest node first. Uses a FIFO queue. It is complete and optimal (if step costs are equal). Space complexity: $O(b^d)$, which can quickly exhaust memory.</li>
+        <li><strong>Depth-First Search (DFS):</strong> Expands the deepest node first. Uses a LIFO stack. It is not complete (can loop infinitely in cyclic graphs) and not optimal. Space complexity: $O(b \cdot d)$, which is highly memory efficient.</li>
+      </ul>
+
+      <h3>2. Heuristic Search: A* Algorithm:</h3>
+      <p>A* evaluates nodes using the function: $$f(n) = g(n) + h(n)$$</p>
+      <ul style="line-height:1.5;">
+        <li>$g(n)$: The exact cost incurred to reach node $n$ from the start node.</li>
+        <li>$h(n)$: The estimated heuristic cost to reach the goal from node $n$.</li>
+        <li><strong>Admissibility:</strong> A heuristic $h(n)$ is admissible if it never overestimates the true cost to the goal: $h(n) \le h^*(n)$. This guarantees that A* finds the optimal path.</li>
+        <li><strong>Consistency (Monotonicity):</strong> A heuristic is consistent if, for every node $n$ and successor $n'$ generated by action $a$: $h(n) \le c(n, a, n') + h(n')$. consistent heuristics ensure A* never needs to re-expand nodes.</li>
+      </ul>
+    `
+  },
+  {
+    title: "3. Minimax & Alpha-Beta Pruning",
+    content: `
+      <h2>Game Playing & Alpha-Beta Cutoffs</h2>
+      <p>Games are modeled as adversarial search trees where Max and Min take turns selecting moves.</p>
+      
+      <h3>1. Minimax Algorithm Backup Rules:</h3>
+      <ul>
+        <li>At MAX nodes: return the maximum value of child evaluations: $$v = \max(v_{child})$$</li>
+        <li>At MIN nodes: return the minimum value of child evaluations: $$v = \min(v_{child})$$</li>
+      </ul>
+
+      <h3>2. Alpha-Beta Pruning Inequality:</h3>
+      <p>Alpha-Beta pruning skips branches that cannot change the final decision of the root node. The alpha and beta values are updated during DFS traversal:</p>
+      <ul>
+        <li>$\alpha$ (alpha): The best value Max is guaranteed to achieve. Max nodes update $\alpha = \max(\alpha, child\_val)$.</li>
+        <li>$\beta$ (beta): The best value Min is guaranteed to achieve. Min nodes update $\beta = \min(\beta, child\_val)$.</li>
+        <li><strong>Cutoff Rule:</strong> If at any point in the tree we find $\beta \le \alpha$, we stop evaluating the remaining siblings of that sub-tree.</li>
+      </ul>
+
+      <div class="math-box">
+        <p><strong>Alpha Cutoff Example:</strong></p>
+        Let MAX have a child MIN node $C_1$ that returns value 5. So MAX has $\alpha = 5$.
+        <br>MAX evaluates another child MIN node $C_2$. If the first grandchild of $C_2$ returns value 2, then $C_2$ (being MIN) will return a value of <strong>at most 2</strong>.
+        <br>Because MAX already has a guaranteed move of value 5, MAX will never choose $C_2$. Thus, we prune all remaining siblings of $C_2$'s children without evaluating them!
+      </div>
+    `
+  }
+];
+
+// ==========================================
+// AI SIMULATORS LOGIC
+// ==========================================
+let aiSimInterval = null;
+let aiSimState = {
+  activeSim: 'pathfinder',
+  isRunning: false,
+  grid: [], // Pathfinder 12x12
+  startNode: [2, 2],
+  targetNode: [9, 9],
+  walls: new Set()
+};
+
+function initAiSimulators() {
+  const aiSelect = document.getElementById('ai-select');
+  const playBtn = document.getElementById('ai-btn-play');
+  const resetBtn = document.getElementById('ai-btn-reset');
+  
+  // Select panel toggler
+  aiSelect.addEventListener('change', () => {
+    const active = aiSelect.value;
+    aiSimState.activeSim = active;
+    
+    // Header/Subtitle mapping
+    const titleMap = {
+      'pathfinder': 'BFS/DFS/A* Pathfinder',
+      'minimax': 'Min-Max & Alpha-Beta Game Tree',
+      'hill-climbing': 'Hill Climbing Traversal'
+    };
+    document.getElementById('ai-title').textContent = titleMap[active];
+    document.getElementById('ai-subtitle').textContent = 'Ready to solve...';
+    
+    // Toggle Inputs/Screens
+    document.querySelectorAll('.ai-inputs-panel').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.ai-screen-view').forEach(el => el.classList.add('hidden'));
+    
+    if (active === 'pathfinder') {
+      document.getElementById('ai-inputs-pathfinder').classList.remove('hidden');
+      document.getElementById('ai-render-pathfinder').classList.remove('hidden');
+    } else if (active === 'minimax') {
+      document.getElementById('ai-inputs-minimax').classList.remove('hidden');
+      document.getElementById('ai-render-minimax').classList.remove('hidden');
+      renderMinimaxTreeInitial(); // Render initial static tree
+    } else if (active === 'hill-climbing') {
+      document.getElementById('ai-inputs-hill').classList.remove('hidden');
+      document.getElementById('ai-render-hill').classList.remove('hidden');
+      drawHillClimbingInitial(); // Draw initial curve
+    }
+    
+    resetAiSimulators();
+  });
+  
+  // Play triggers
+  playBtn.addEventListener('click', () => {
+    if (aiSimState.isRunning) {
+      pauseAiSimulation();
+    } else {
+      runAiSimulation();
+    }
+  });
+  
+  resetBtn.addEventListener('click', resetAiSimulators);
+  
+  // Initialize Pathfinder Grid Board
+  buildPathfinderGridBoard();
+}
+
+function runAiSimulation() {
+  aiSimState.isRunning = true;
+  document.getElementById('ai-btn-play').textContent = 'Pause';
+  
+  const sim = aiSimState.activeSim;
+  if (sim === 'pathfinder') {
+    runPathfinderSearch();
+  } else if (sim === 'minimax') {
+    runMinimaxSearch();
+  } else if (sim === 'hill-climbing') {
+    runHillClimbingSearch();
+  }
+}
+
+function pauseAiSimulation() {
+  aiSimState.isRunning = false;
+  document.getElementById('ai-btn-play').textContent = 'Run Simulation';
+  clearInterval(aiSimInterval);
+}
+
+function resetAiSimulators() {
+  pauseAiSimulation();
+  document.getElementById('ai-audit-log').textContent = 'Awaiting simulation start...';
+  
+  const sim = aiSimState.activeSim;
+  if (sim === 'pathfinder') {
+    resetPathfinderBoard();
+  } else if (sim === 'minimax') {
+    renderMinimaxTreeInitial();
+  } else if (sim === 'hill-climbing') {
+    drawHillClimbingInitial();
+  }
+}
+
+// 1. Pathfinder Search Engine
+function buildPathfinderGridBoard() {
+  const board = document.getElementById('ai-grid-board');
+  if (!board) return;
+  board.innerHTML = '';
+  
+  for (let r = 0; r < 12; r++) {
+    for (let c = 0; c < 12; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'ai-grid-cell';
+      cell.id = `ai-cell-${r}-${c}`;
+      
+      // Mark start/target
+      if (r === aiSimState.startNode[0] && c === aiSimState.startNode[1]) {
+        cell.classList.add('cell-start');
+      } else if (r === aiSimState.targetNode[0] && c === aiSimState.targetNode[1]) {
+        cell.classList.add('cell-target');
+      } else {
+        // Toggle walls on click
+        cell.addEventListener('click', () => {
+          if (aiSimState.isRunning) return;
+          const coordStr = `${r},${c}`;
+          if (aiSimState.walls.has(coordStr)) {
+            aiSimState.walls.delete(coordStr);
+            cell.classList.remove('cell-wall');
+          } else {
+            aiSimState.walls.add(coordStr);
+            cell.classList.add('cell-wall');
+          }
+        });
+      }
+      board.appendChild(cell);
+    }
+  }
+}
+
+function resetPathfinderBoard() {
+  for (let r = 0; r < 12; r++) {
+    for (let c = 0; c < 12; c++) {
+      const cell = document.getElementById(`ai-cell-${r}-${c}`);
+      if (cell) {
+        cell.classList.remove('cell-visited', 'cell-path');
+      }
+    }
+  }
+}
+
+function runPathfinderSearch() {
+  resetPathfinderBoard();
+  
+  const algo = document.getElementById('ai-path-algo').value;
+  const start = aiSimState.startNode;
+  const target = aiSimState.targetNode;
+  
+  // Search state trackers
+  const visited = [];
+  const visitedOrder = [];
+  const parentMap = {};
+  
+  // Priority Queue / Stack helper
+  let frontier = [];
+  
+  if (algo === 'bfs') {
+    frontier.push(start);
+  } else if (algo === 'dfs') {
+    frontier.push(start);
+  } else if (algo === 'astar') {
+    frontier.push({ node: start, g: 0, f: getManhattanDistance(start, target) });
+  }
+  
+  const visitedSet = new Set();
+  const parentKey = (node) => `${node[0]},${node[1]}`;
+  visitedSet.add(parentKey(start));
+  
+  let found = false;
+  
+  while (frontier.length > 0) {
+    let current;
+    
+    if (algo === 'bfs') {
+      current = frontier.shift();
+    } else if (algo === 'dfs') {
+      current = frontier.pop();
+    } else if (algo === 'astar') {
+      // Find lowest F score
+      frontier.sort((a, b) => a.f - b.f);
+      const currObj = frontier.shift();
+      current = currObj.node;
+    }
+    
+    visitedOrder.push(current);
+    
+    if (current[0] === target[0] && current[1] === target[1]) {
+      found = true;
+      break;
+    }
+    
+    const row = current[0];
+    const col = current[1];
+    
+    // Neighbors (up, down, left, right)
+    const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    
+    for (const [dr, dc] of dirs) {
+      const nr = row + dr;
+      const nc = col + dc;
+      const nKey = `${nr},${nc}`;
+      
+      // Boundaries & walls checks
+      if (nr >= 0 && nr < 12 && nc >= 0 && nc < 12 && !aiSimState.walls.has(nKey) && !visitedSet.has(nKey)) {
+        visitedSet.add(nKey);
+        parentMap[nKey] = current;
+        const neighbor = [nr, nc];
+        
+        if (algo === 'bfs' || algo === 'dfs') {
+          frontier.push(neighbor);
+        } else if (algo === 'astar') {
+          const gScore = (algo === 'astar') ? (getGScore(current, parentMap) + 1) : 0;
+          const fScore = gScore + getManhattanDistance(neighbor, target);
+          frontier.push({ node: neighbor, g: gScore, f: fScore });
+        }
+      }
+    }
+  }
+  
+  function getGScore(node, pMap) {
+    let score = 0;
+    let curr = node;
+    while (curr) {
+      const key = parentKey(curr);
+      curr = pMap[key];
+      if (curr) score++;
+    }
+    return score;
+  }
+  
+  // Reconstruct path
+  const path = [];
+  if (found) {
+    let curr = target;
+    while (curr) {
+      path.push(curr);
+      curr = parentMap[parentKey(curr)];
+    }
+    path.reverse();
+  }
+  
+  // Animate exploration
+  let step = 0;
+  const audit = document.getElementById('ai-audit-log');
+  audit.innerHTML = `[SOLVER] Initiating pathfinding search using ${algo.toUpperCase()}...`;
+  
+  aiSimInterval = setInterval(() => {
+    if (step < visitedOrder.length) {
+      const node = visitedOrder[step];
+      const cell = document.getElementById(`ai-cell-${node[0]}-${node[1]}`);
+      
+      // Avoid coloring start/target
+      if (cell && !cell.classList.contains('cell-start') && !cell.classList.contains('cell-target')) {
+        cell.classList.add('cell-visited');
+      }
+      audit.textContent = `[SOLVING] Explored frontier node: (${node[0]}, ${node[1]}) [Steps: ${step + 1}]`;
+      step++;
+    } else {
+      clearInterval(aiSimInterval);
+      
+      // Draw path
+      if (found) {
+        path.forEach(node => {
+          const cell = document.getElementById(`ai-cell-${node[0]}-${node[1]}`);
+          if (cell && !cell.classList.contains('cell-start') && !cell.classList.contains('cell-target')) {
+            cell.classList.add('cell-path');
+          }
+        });
+        audit.innerHTML = `<span class="status-safe">✅ PATH RESOLVED:</span> Successfully reached Target node in <strong>${path.length} steps</strong>. Total cells evaluated: ${visitedOrder.length}.`;
+        document.getElementById('ai-subtitle').textContent = `Resolved in ${path.length} steps.`;
+      } else {
+        audit.innerHTML = `<span class="status-vuln">❌ NO PATH FOUND:</span> Target node is completely blocked by walls. Checked ${visitedOrder.length} reachable states.`;
+        document.getElementById('ai-subtitle').textContent = 'No route available.';
+      }
+      
+      aiSimState.isRunning = false;
+      document.getElementById('ai-btn-play').textContent = 'Run Simulation';
+    }
+  }, 40);
+}
+
+function getManhattanDistance(n1, n2) {
+  return Math.abs(n1[0] - n2[0]) + Math.abs(n1[1] - n2[1]);
+}
+
+// 2. Minimax & Alpha-Beta Game Tree Simulator
+const treeNodes = {
+  'A': { label: 'Root A (Max)', val: '?', x: 250, y: 30, depth: 0, type: 'max' },
+  'B': { label: 'B (Min)', val: '?', x: 130, y: 85, depth: 1, type: 'min' },
+  'C': { label: 'C (Min)', val: '?', x: 370, y: 85, depth: 1, type: 'min' },
+  'D': { label: 'D (Max)', val: '?', x: 70, y: 140, depth: 2, type: 'max' },
+  'E': { label: 'E (Max)', val: '?', x: 190, y: 140, depth: 2, type: 'max' },
+  'F': { label: 'F (Max)', val: '?', x: 310, y: 140, depth: 2, type: 'max' },
+  'G': { label: 'G (Max)', val: '?', x: 430, y: 140, depth: 2, type: 'max' },
+  'H': { label: 'H', val: 3, x: 45, y: 195, depth: 3, type: 'leaf' },
+  'I': { label: 'I', val: 5, x: 95, y: 195, depth: 3, type: 'leaf' },
+  'J': { label: 'J', val: 6, x: 165, y: 195, depth: 3, type: 'leaf' },
+  'K': { label: 'K', val: 9, x: 215, y: 195, depth: 3, type: 'leaf' },
+  'L': { label: 'L', val: 2, x: 285, y: 195, depth: 3, type: 'leaf' },
+  'M': { label: 'M', val: 1, x: 335, y: 195, depth: 3, type: 'leaf' },
+  'N': { label: 'N', val: 4, x: 405, y: 195, depth: 3, type: 'leaf' },
+  'O': { label: 'O', val: 8, x: 455, y: 195, depth: 3, type: 'leaf' }
+};
+
+const treeLinks = [
+  { parent: 'A', child: 'B' }, { parent: 'A', child: 'C' },
+  { parent: 'B', child: 'D' }, { parent: 'B', child: 'E' },
+  { parent: 'C', child: 'F' }, { parent: 'C', child: 'G' },
+  { parent: 'D', child: 'H' }, { parent: 'D', child: 'I' },
+  { parent: 'E', child: 'J' }, { parent: 'E', child: 'K' },
+  { parent: 'F', child: 'L' }, { parent: 'F', child: 'M' },
+  { parent: 'G', child: 'N' }, { parent: 'G', child: 'O' }
+];
+
+function renderMinimaxTreeInitial() {
+  const svg = document.getElementById('ai-tree-svg');
+  if (!svg) return;
+  svg.innerHTML = '';
+  
+  // Draw link lines
+  treeLinks.forEach(link => {
+    const pNode = treeNodes[link.parent];
+    const cNode = treeNodes[link.child];
+    
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", pNode.x);
+    line.setAttribute("y1", pNode.y);
+    line.setAttribute("x2", cNode.x);
+    line.setAttribute("y2", cNode.y);
+    line.setAttribute("class", "tree-link-line");
+    line.setAttribute("id", `link-${link.parent}-${link.child}`);
+    svg.appendChild(line);
+  });
+  
+  // Draw node circles
+  Object.keys(treeNodes).forEach(key => {
+    const node = treeNodes[key];
+    
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", node.x);
+    circle.setAttribute("cy", node.y);
+    circle.setAttribute("r", 15);
+    circle.setAttribute("class", "tree-node-circle");
+    circle.setAttribute("id", `circle-${key}`);
+    g.appendChild(circle);
+    
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", node.x);
+    text.setAttribute("y", node.y);
+    text.setAttribute("class", "tree-node-text");
+    text.setAttribute("id", `text-${key}`);
+    text.textContent = node.type === 'leaf' ? node.val : '?';
+    g.appendChild(text);
+    
+    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    label.setAttribute("x", node.x);
+    label.setAttribute("y", node.y - 20);
+    label.setAttribute("class", "tree-eval-label");
+    label.textContent = node.depth === 0 ? "MAX" : node.depth === 1 ? "MIN" : node.depth === 2 ? "MAX" : "";
+    g.appendChild(label);
+    
+    svg.appendChild(g);
+  });
+}
+
+function runMinimaxSearch() {
+  renderMinimaxTreeInitial();
+  
+  const isPruningEnabled = document.getElementById('ai-ab-pruning').checked;
+  const audit = document.getElementById('ai-audit-log');
+  audit.innerHTML = `[SOLVER] Initiating Min-Max DFS traversal (Pruning: ${isPruningEnabled ? 'ENABLED' : 'DISABLED'})...`;
+  
+  // Custom step animation list
+  const steps = [];
+  
+  // Minimax with Alpha-Beta
+  let alpha = -Infinity;
+  let beta = Infinity;
+  
+  // Left subtree B
+  // D
+  steps.push({ type: 'visit', node: 'D', alpha, beta });
+  steps.push({ type: 'visit', node: 'H', alpha, beta });
+  steps.push({ type: 'backup', node: 'D', val: 3, alpha, beta });
+  steps.push({ type: 'visit', node: 'I', alpha, beta });
+  steps.push({ type: 'backup', node: 'D', val: 5, alpha, beta });
+  steps.push({ type: 'backup', node: 'B', val: 5, alpha, beta }); // B updates beta = 5
+  
+  // E
+  steps.push({ type: 'visit', node: 'E', alpha, beta: 5 });
+  steps.push({ type: 'visit', node: 'J', alpha, beta: 5 });
+  steps.push({ type: 'backup', node: 'E', val: 6, alpha, beta: 5 });
+  steps.push({ type: 'visit', node: 'K', alpha, beta: 5 });
+  steps.push({ type: 'backup', node: 'E', val: 9, alpha, beta: 5 });
+  steps.push({ type: 'backup', node: 'B', val: 5, alpha, beta: 5 }); // B remains 5
+  steps.push({ type: 'backup', node: 'A', val: 5, alpha: 5, beta }); // A updates alpha = 5
+  
+  // Right subtree C
+  // F
+  steps.push({ type: 'visit', node: 'C', alpha: 5, beta });
+  steps.push({ type: 'visit', node: 'F', alpha: 5, beta });
+  steps.push({ type: 'visit', node: 'L', alpha: 5, beta });
+  steps.push({ type: 'backup', node: 'F', val: 2, alpha: 5, beta });
+  steps.push({ type: 'visit', node: 'M', alpha: 5, beta });
+  steps.push({ type: 'backup', node: 'F', val: 2, alpha: 5, beta }); // F remains 2 (Max is 2)
+  steps.push({ type: 'backup', node: 'C', val: 2, alpha: 5, beta: 2 }); // C updates beta = 2
+  
+  // Check prune condition at C
+  if (isPruningEnabled) {
+    // beta of C (2) <= alpha of A (5) => PRUNE G!
+    steps.push({ type: 'prune', node: 'G', parent: 'C', alpha: 5, beta: 2 });
+  } else {
+    // Normal Minimax traversal
+    steps.push({ type: 'visit', node: 'G', alpha: 5, beta: 2 });
+    steps.push({ type: 'visit', node: 'N', alpha: 5, beta: 2 });
+    steps.push({ type: 'backup', node: 'G', val: 4, alpha: 5, beta: 2 });
+    steps.push({ type: 'visit', node: 'O', alpha: 5, beta: 2 });
+    steps.push({ type: 'backup', node: 'G', val: 8, alpha: 5, beta: 2 });
+    steps.push({ type: 'backup', node: 'C', val: 2, alpha: 5, beta: 2 });
+  }
+  
+  steps.push({ type: 'backup', node: 'A', val: 5, alpha: 5, beta: Infinity });
+  
+  // Animate steps
+  let index = 0;
+  aiSimInterval = setInterval(() => {
+    if (index < steps.length) {
+      const step = steps[index];
+      
+      // De-active previous nodes
+      document.querySelectorAll('.tree-node-circle').forEach(el => el.classList.remove('active'));
+      
+      if (step.type === 'visit') {
+        const circ = document.getElementById(`circle-${step.node}`);
+        if (circ) circ.classList.add('active');
+        audit.innerHTML = `[DFS VISIT] Evaluating Node <strong>${step.node}</strong> (Current parameters: &alpha;=${step.alpha === -Infinity ? '-&infin;' : step.alpha}, &beta;=${step.beta === Infinity ? '&infin;' : step.beta})`;
+      } else if (step.type === 'backup') {
+        const circ = document.getElementById(`circle-${step.node}`);
+        if (circ) circ.classList.add('active');
+        const txt = document.getElementById(`text-${step.node}`);
+        if (txt) txt.textContent = step.val;
+        audit.innerHTML = `[BACKUP] Propagated evaluation back to Parent Node <strong>${step.node}</strong>. Current backed up value: <strong style="color:var(--primary-color);">${step.val}</strong>`;
+      } else if (step.type === 'prune') {
+        // Prune the G subtree nodes and links
+        const prunedNodes = ['G', 'N', 'O'];
+        prunedNodes.forEach(n => {
+          const c = document.getElementById(`circle-${n}`);
+          const t = document.getElementById(`text-${n}`);
+          if (c) c.classList.add('pruned');
+          if (t) t.classList.add('pruned');
+        });
+        
+        const prunedLinks = ['C-G', 'G-N', 'G-O'];
+        prunedLinks.forEach(l => {
+          const line = document.getElementById(`link-${l}`);
+          if (line) line.classList.add('pruned');
+        });
+        
+        audit.innerHTML = `<span class="status-vuln">[PRUNE] CUTOFF DETECTED!</span> At Node <strong>${step.parent}</strong>, &beta; (${step.beta}) is &le; &alpha; (${step.alpha}) at the parent level. Branch <strong>G</strong> is pruned and will not be evaluated!`;
+      }
+      
+      index++;
+    } else {
+      clearInterval(aiSimInterval);
+      audit.innerHTML += `<br><br><span class="status-safe">✅ GAME SOLVED:</span> Root choice resolved to move B with value <strong>5</strong>. ${isPruningEnabled ? 'Pruning saved 3 node checks.' : 'Checked all nodes.'}`;
+      document.getElementById('ai-subtitle').textContent = 'Resolved Root = 5';
+      aiSimState.isRunning = false;
+      document.getElementById('ai-btn-play').textContent = 'Run Simulation';
+    }
+  }, 1000);
+}
+
+// 3. Hill Climbing physics simulator
+function drawHillClimbingInitial() {
+  const canvas = document.getElementById('ai-hill-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+  
+  ctx.fillStyle = '#05080c';
+  ctx.fillRect(0, 0, w, h);
+  
+  // Draw curve: flat plateau in middle, local peak left, global peak right
+  ctx.strokeStyle = 'rgba(0, 242, 254, 0.4)';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  
+  for (let x = 0; x < w; x++) {
+    const y = getHillElevationY(x, w, h);
+    if (x === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  
+  // Draw local peak text
+  ctx.fillStyle = 'var(--warning-color)';
+  ctx.font = '8px JetBrains Mono';
+  ctx.fillText('Local Peak (X=100)', 70, 75);
+  
+  // Draw plateau
+  ctx.fillStyle = 'var(--accent-purple)';
+  ctx.fillText('Plateau Area', 225, 145);
+  
+  // Draw global peak
+  ctx.fillStyle = 'var(--success-color)';
+  ctx.fillText('Global Peak (X=420)', 390, 45);
+  
+  // Initial Agent position (X=40, y=140 area)
+  const initX = 30;
+  const initY = getHillElevationY(initX, w, h);
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(initX, initY, 5, 0, 2*Math.PI);
+  ctx.fill();
+}
+
+function getHillElevationY(x, w, h) {
+  // mathematical function defining peaks
+  const localPeak = 90 * Math.exp(-Math.pow((x - 100) / 45, 2));
+  const globalPeak = 140 * Math.exp(-Math.pow((x - 420) / 50, 2));
+  
+  // Plateau: flat at height 160
+  let plateau = 0;
+  if (x >= 200 && x <= 280) {
+    plateau = 40; 
+  } else if (x > 140 && x < 200) {
+    plateau = 40 * (x - 140) / 60;
+  } else if (x > 280 && x < 340) {
+    plateau = 40 * (340 - x) / 60;
+  }
+  
+  const base = h - 60 - localPeak - globalPeak - plateau;
+  return base;
+}
+
+function runHillClimbingSearch() {
+  const canvas = document.getElementById('ai-hill-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+  const mode = document.getElementById('ai-hill-mode').value;
+  const audit = document.getElementById('ai-audit-log');
+  
+  let agentX = 30; // Starting point on the left
+  let steps = 0;
+  
+  audit.innerHTML = `[SOLVER] Spawning climber agent at X=30... (Mode: ${mode.toUpperCase()})`;
+  
+  aiSimInterval = setInterval(() => {
+    // Redraw curve
+    ctx.fillStyle = '#05080c';
+    ctx.fillRect(0, 0, w, h);
+    
+    ctx.strokeStyle = 'rgba(0, 242, 254, 0.4)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let x = 0; x < w; x++) {
+      const y = getHillElevationY(x, w, h);
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    
+    ctx.fillStyle = 'var(--warning-color)';
+    ctx.fillText('Local Peak (X=100)', 70, 75);
+    ctx.fillStyle = 'var(--accent-purple)';
+    ctx.fillText('Plateau Area', 225, 145);
+    ctx.fillStyle = 'var(--success-color)';
+    ctx.fillText('Global Peak (X=420)', 390, 45);
+    
+    // Draw past trace path
+    ctx.strokeStyle = 'rgba(0, 242, 254, 0.15)';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    for (let x = 30; x <= agentX; x++) {
+      const y = getHillElevationY(x, w, h);
+      if (x === 30) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    
+    // Local Search calculation
+    const currY = getHillElevationY(agentX, w, h);
+    
+    // Neighbor analysis
+    let nextX = agentX;
+    
+    if (mode === 'simple') {
+      // Check left/right. First check right (step size 3)
+      const stepRightY = getHillElevationY(agentX + 3, w, h);
+      const stepLeftY = getHillElevationY(agentX - 3, w, h);
+      
+      // Remember Y is downward screen coordinates, so smaller Y means higher elevation!
+      if (stepRightY < currY) {
+        nextX = agentX + 3;
+      } else if (stepLeftY < currY) {
+        nextX = agentX - 3;
+      }
+    } else if (mode === 'steepest') {
+      const stepRightY = getHillElevationY(agentX + 4, w, h);
+      const stepLeftY = getHillElevationY(agentX - 4, w, h);
+      
+      // Choose best direction
+      const rightImprove = currY - stepRightY;
+      const leftImprove = currY - stepLeftY;
+      
+      if (rightImprove > 0 || leftImprove > 0) {
+        if (rightImprove >= leftImprove) {
+          nextX = agentX + 4;
+        } else {
+          nextX = agentX - 4;
+        }
+      }
+    }
+    
+    // Draw Climber agent
+    const agentY = getHillElevationY(agentX, w, h);
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(agentX, agentY, 5, 0, 2*Math.PI);
+    ctx.fill();
+    
+    if (nextX === agentX) {
+      // Stuck! No improvement neighbors.
+      clearInterval(aiSimInterval);
+      
+      if (Math.abs(agentX - 100) < 5) {
+        audit.innerHTML = `<span class="status-vuln">⚠️ TRAPPED IN LOCAL MAXIMA:</span> The climber stopped at X=${Math.round(agentX)} (elevation: ${Math.round(h - agentY)}). All surrounding steps lead downward, but this peak is lower than the Global Peak!`;
+        document.getElementById('ai-subtitle').textContent = 'Trapped: Local Maxima';
+      } else if (agentX >= 180 && agentX <= 285) {
+        audit.innerHTML = `<span class="status-vuln">⚠️ STALLED ON PLATEAU:</span> The climber halted in the flat plateau zone (X=${Math.round(agentX)}). All local neighbors have the same height; gradient is zero.`;
+        document.getElementById('ai-subtitle').textContent = 'Stalled: Plateau';
+      } else if (Math.abs(agentX - 420) < 10) {
+        audit.innerHTML = `<span class="status-safe">✅ SUCCESS:</span> The climber reached the global maximum peak at X=${Math.round(agentX)} (elevation: ${Math.round(h - agentY)})!`;
+        document.getElementById('ai-subtitle').textContent = 'Peak achieved!';
+      } else {
+        audit.innerHTML = `Climber stopped at X=${Math.round(agentX)}.`;
+      }
+      
+      aiSimState.isRunning = false;
+      document.getElementById('ai-btn-play').textContent = 'Run Simulation';
+    } else {
+      agentX = nextX;
+      steps++;
+      audit.textContent = `[CLIMBING] Stepping along slope. Current coordinate: X=${Math.round(agentX)}, Height=${Math.round(h - agentY)}`;
+    }
+  }, 100);
+}
+
+// ==========================================
+// SUBJECT SWITCHER CONTROLLER
+// ==========================================
+function initSubjectSwitcher() {
+  const subjectSelect = document.getElementById('subject-select');
+  const cprogramsNavBtn = document.getElementById('nav-cprograms');
+  
+  subjectSelect.addEventListener('change', (e) => {
+    activeSubject = e.target.value;
+    
+    // Toggle slidesData pointer
+    if (activeSubject === 'cg') {
+      slidesData = slidesDataCG;
+      flashcardsData = flashcardsDataCG;
+      cprogramsNavBtn.classList.remove('hidden');
+      
+      document.getElementById('cg-visualizer-container').classList.remove('hidden');
+      document.getElementById('cs-visualizer-container').classList.add('hidden');
+      document.getElementById('ai-visualizer-container').classList.add('hidden');
+    } else if (activeSubject === 'cs') {
+      slidesData = slidesDataCS;
+      flashcardsData = flashcardsDataCS;
+      cprogramsNavBtn.classList.add('hidden');
+      
+      const activeNavTab = document.querySelector('.nav-btn.active');
+      if (activeNavTab && activeNavTab.getAttribute('data-tab') === 'cprograms') {
+        document.getElementById('nav-slides').click();
+      }
+      
+      document.getElementById('cg-visualizer-container').classList.add('hidden');
+      document.getElementById('cs-visualizer-container').classList.remove('hidden');
+      document.getElementById('ai-visualizer-container').classList.add('hidden');
+    } else if (activeSubject === 'ai') {
+      slidesData = slidesDataAI;
+      flashcardsData = flashcardsDataAI;
+      cprogramsNavBtn.classList.add('hidden');
+      
+      const activeNavTab = document.querySelector('.nav-btn.active');
+      if (activeNavTab && activeNavTab.getAttribute('data-tab') === 'cprograms') {
+        document.getElementById('nav-slides').click();
+      }
+      
+      document.getElementById('cg-visualizer-container').classList.add('hidden');
+      document.getElementById('cs-visualizer-container').classList.add('hidden');
+      document.getElementById('ai-visualizer-container').classList.remove('hidden');
+    }
+    
+    // Refresh slideshow list and load first slide
+    initSlideshow();
+    
+    // Refresh flashcards progress and index
+    activeCardIdx = 0;
+    initFlashcards();
+    
+    // Refresh study guide contents
+    if (window.refreshStudyGuide) {
+      window.refreshStudyGuide();
+    }
+    
+    // Trigger resize for layout rendering yokes
+    window.dispatchEvent(new Event('resize'));
+  });
+}
+
 // ==========================================
 // MAIN INITIALIZATION ON DOM LOADED
 // ==========================================
@@ -4326,6 +5355,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initCPrograms();
   initCsThreatSimulators(); // Register cyber security visualizer simulations
   initStudyGuide(); // Register study guide textbook renderer
+  initAiSimulators(); // Register artificial intelligence visualizer simulations
 });
+
 
 

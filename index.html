@@ -26,6 +26,7 @@
       <select id="subject-select" class="form-control subject-select-dropdown">
         <option value="cg" selected>Computer Graphics & Lab</option>
         <option value="cs">IMCA605T Cyber Security & Crime</option>
+        <option value="ai">IMCA603T Artificial Intelligence</option>
       </select>
     </div>
     
@@ -507,6 +508,105 @@
             <div class="trace-card">
               <h3>Simulation Audit Logs</h3>
               <div class="trace-summary" id="threat-audit-log">
+                Awaiting simulation start...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Artificial Intelligence Simulators Content -->
+      <div id="ai-visualizer-container" class="hidden" style="width: 100%;">
+        <div class="visualizer-layout">
+          <!-- Sidebar controls -->
+          <div class="visualizer-controls-panel">
+            <h3>AI Simulators</h3>
+            <div class="form-group">
+              <label for="ai-select">Select Simulator</label>
+              <select id="ai-select" class="form-control">
+                <option value="pathfinder" selected>BFS/DFS/A* Pathfinder (Unit-II)</option>
+                <option value="minimax">Min-Max & Alpha-Beta Tree (Unit-II)</option>
+                <option value="hill-climbing">Hill Climbing Traversal (Unit-II)</option>
+              </select>
+            </div>
+            
+            <!-- Parameters panels -->
+            <div id="ai-inputs-pathfinder" class="ai-inputs-panel">
+              <p class="input-note">
+                Click on the grid cells to draw walls. Select an algorithm to solve pathfinding from Start (blue) to Target (green).
+              </p>
+              <div class="form-group">
+                <label for="ai-path-algo">Search Algorithm</label>
+                <select id="ai-path-algo" class="form-control">
+                  <option value="bfs">Breadth-First Search (BFS)</option>
+                  <option value="dfs">Depth-First Search (DFS)</option>
+                  <option value="astar" selected>A* Algorithm (Heuristics)</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="ai-inputs-minimax" class="ai-inputs-panel hidden">
+              <p class="input-note">
+                Traverse a Min-Max tree. Toggle Alpha-Beta Pruning to see how branches are cut off (pruned in red).
+              </p>
+              <div class="form-group" style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-size:0.8rem; color:var(--color-text-secondary);">
+                <input type="checkbox" id="ai-ab-pruning" checked style="accent-color:var(--primary-color);"> Enable Alpha-Beta Pruning
+              </div>
+            </div>
+
+            <div id="ai-inputs-hill" class="ai-inputs-panel hidden">
+              <p class="input-note">
+                Select Hill Climbing variant and click "Run Simulation" to see the agent climb towards the peak.
+              </p>
+              <div class="form-group">
+                <label for="ai-hill-mode">Hill Climbing Variant</label>
+                <select id="ai-hill-mode" class="form-control">
+                  <option value="simple">Simple Hill Climbing</option>
+                  <option value="steepest">Steepest-Ascent Hill Climbing</option>
+                </select>
+              </div>
+            </div>
+            
+            <!-- Controls -->
+            <div class="visualizer-actions">
+              <button class="btn btn-primary" id="ai-btn-play">Run Simulation</button>
+              <button class="btn btn-danger" id="ai-btn-reset">Reset</button>
+            </div>
+          </div>
+
+          <!-- Simulation Screen -->
+          <div class="visualizer-display-panel">
+            <div class="grid-card">
+              <div class="grid-card-header">
+                <h3 id="ai-title">BFS/DFS/A* Pathfinder</h3>
+                <div class="grid-resolution" id="ai-subtitle">Ready to solve...</div>
+              </div>
+              <div class="grid-viewport" style="background:#05080c; padding: 1rem; border:1px solid var(--border-color); min-height: 320px; align-items:center; justify-content:center;">
+                <!-- Pathfinder Grid -->
+                <div id="ai-render-pathfinder" class="ai-screen-view" style="width:100%;">
+                  <div id="ai-grid-board" style="display:grid; grid-template-columns: repeat(12, 1fr); gap:3px; max-width:320px; margin:0 auto; aspect-ratio:1; padding:5px; background:#0d121f; border-radius:8px; border:1px solid var(--border-color);">
+                    <!-- Grid cells populated dynamically -->
+                  </div>
+                </div>
+                
+                <!-- Minimax Tree SVG -->
+                <div id="ai-render-minimax" class="ai-screen-view hidden" style="width:100%;">
+                  <svg id="ai-tree-svg" viewBox="0 0 500 240" style="width:100%; height:auto;">
+                    <!-- Lines and Nodes populated dynamically -->
+                  </svg>
+                </div>
+
+                <!-- Hill Climbing Chart -->
+                <div id="ai-render-hill" class="ai-screen-view hidden" style="width:100%;">
+                  <canvas id="ai-hill-canvas" width="500" height="240" style="width:100%; height:auto; background:#000000; border:1px solid var(--border-color); border-radius:6px; display:block;"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Audit Logs -->
+            <div class="trace-card">
+              <h3>Simulation Audit Logs</h3>
+              <div class="trace-summary" id="ai-audit-log" style="font-size:0.8rem; line-height:1.5;">
                 Awaiting simulation start...
               </div>
             </div>
