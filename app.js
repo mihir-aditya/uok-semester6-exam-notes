@@ -67,7 +67,7 @@ function initTabs() {
 // ==========================================
 // PRESENTATION SLIDES DATA & RENDERING
 // ==========================================
-const slidesData = [
+const slidesDataCG = [
   {
     title: "Course Overview & Syllabus Map",
     unit: "Intro",
@@ -721,7 +721,7 @@ function initSlideshow() {
 // ==========================================
 // STUDY FLASHCARDS DATA & CONTROLLER
 // ==========================================
-const flashcardsData = [
+const flashcardsDataCG = [
   {
     category: "Graphics Hardware",
     question: "Compare Raster Scan and Random Scan Display systems on line smoothness.",
@@ -3151,14 +3151,753 @@ function initCPrograms() {
   window.redrawTCCanvas = drawSimulatedCanvas;
 }
 
+// Global pointers matching active course selection
+let slidesData = slidesDataCG;
+let flashcardsData = flashcardsDataCG;
+let activeSubject = 'cg';
+
+// Cyber Security Slides Database
+const slidesDataCS = [
+  {
+    title: "Course Overview & Syllabus Map",
+    unit: "Intro",
+    content: `
+      <h2>Cyber Security & Crime <span class="slide-unit-badge">IMCA605T</span></h2>
+      <p>Welcome! This section is structured to prepare you for the IMCA605T Cyber Security and Cyber Crime exam, covering Units I, II, and III in deep academic detail.</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>Unit-I & II: Crime Definitions & Offenses</h4>
+          <ul class="slide-bullet-list">
+            <li><strong>Unit-I Concepts:</strong> Cybercrime origins, InfoSec relationship, types of cybercriminals.</li>
+            <li><strong>Classifications:</strong> Spoofing, Spamming, Defamation, Time Theft, Salami attacks, Data diddling, Forgery, Web jacking.</li>
+            <li><strong>Unit-II Planning:</strong> Attack lifecycle, Reconnaissance, Passive vs. Active attacks.</li>
+          </ul>
+        </div>
+        <div class="info-callout" style="border-left-color: var(--accent-purple);">
+          <h4 style="color: var(--accent-purple);">Unit-III: Mobile Security & Fraud</h4>
+          <ul class="slide-bullet-list">
+            <li><strong>Hardware trends:</strong> Mobile proliferation, challenges, and BYOD enterprise policies.</li>
+            <li><strong>Credit Card Frauds:</strong> CNP, Skimming, Phishing, Keylogging.</li>
+            <li><strong>Mobile Hardening:</strong> Windows Mobile Registry keys blockages, CAB policies, security guidelines.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <p>💡 <em>Choose the tabs above to toggle between detailed slides, digital study flashcards, and live interactive threat simulation visualizers!</em></p>
+    `
+  },
+  {
+    title: "Syllabus Unit-I: Definition & Criminals",
+    unit: "Unit-I",
+    content: `
+      <h2>Cybercrime & Information Security <span class="slide-unit-badge">Unit-I</span></h2>
+      <p><strong>Cybercrime</strong> is any illegal activity where a computer, network, or digital device is used as a tool, a target, or both.</p>
+      
+      <div class="info-callout">
+        <h4>Origin of the Word:</h4>
+        The prefix "cyber" originates from the word <strong>Cybernetics</strong>, coined by mathematician Norbert Wiener in 1948 to describe the study of control and communication systems in machines and living organisms. Today, "cyber" denotes anything relating to computers, information technology, and virtual space.
+      </div>
+
+      <div class="slide-grid-2">
+        <div>
+          <h4>Who are Cybercriminals?</h4>
+          <ul class="slide-bullet-list" style="margin-left:1rem; font-size:0.88rem;">
+            <li><strong>Hackers:</strong> Individuals who explore computer code. Can be White Hat (ethical), Black Hat (crackers/malicious), or Grey Hat (unauthorized but not malicious).</li>
+            <li><strong>Script Kiddies:</strong> Unskilled amateurs who launch attacks using pre-made tools developed by others.</li>
+            <li><strong>Insider Threats:</strong> Disgruntled employees or contractors inside an organization. They pose the highest security risk because they already have authorized access keys.</li>
+            <li><strong>Cyber Terrorists:</strong> Ideologically motivated attackers targeting critical infrastructure (power grids, government systems) to spread fear.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Cybercrime vs. InfoSec</h4>
+          <p style="font-size:0.88rem; line-height:1.4;">
+            While <strong>Cybercrime</strong> represents the offense, <strong>Information Security (InfoSec)</strong> represents the defense. InfoSec aims to safeguard the Confidentiality, Integrity, and Availability (CIA Triad) of data from cybercriminal intrusion.
+          </p>
+        </div>
+      </div>
+    `
+  },
+  {
+    title: "Syllabus Unit-I: Classifications Part 1",
+    unit: "Unit-I",
+    content: `
+      <h2>Classifications of Cybercrimes (1) <span class="slide-unit-badge">Unit-I</span></h2>
+      <p>Exams frequently require definitions of specific cybercrime classifications. Here are the core classifications of Unit-I.</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>1. E-Mail Spoofing</h4>
+          <p style="font-size:0.85rem; margin-bottom: 0.5rem;">
+            Altering email headers so that the message appears to originate from a legitimate, trusted sender (e.g. your bank). 
+          </p>
+          <em>Technique:</em> SMTP (Simple Mail Transfer Protocol) historically lacks sender authentication, allowing spoofers to falsify the "From:" field. Often used in Phishing campaigns.
+        </div>
+        <div class="info-callout" style="border-left-color: var(--accent-purple);">
+          <h4 style="color:var(--accent-purple);">2. Spamming</h4>
+          <p style="font-size:0.85rem; margin-bottom: 0.5rem;">
+            The sending of bulk, unsolicited commercial messages (spams) to millions of email addresses.
+          </p>
+          <em>Impact:</em> Clogs mail servers, consumes network bandwidth, and often serves as a delivery vehicle for malware or scam links.
+        </div>
+      </div>
+
+      <div class="info-callout" style="border-left-color: var(--success-color); margin-top: 1rem;">
+        <h4>3. Cyber Defamation</h4>
+        <p style="font-size:0.88rem; margin-bottom:0;">
+          The act of publishing false statements about an individual or organization on the internet (via websites, forums, social media) with the malicious intent of damaging their reputation or business standing.
+        </p>
+      </div>
+    `
+  },
+  {
+    title: "Syllabus Unit-I: Classifications Part 2",
+    unit: "Unit-I",
+    content: `
+      <h2>Classifications of Cybercrimes (2) <span class="slide-unit-badge">Unit-I</span></h2>
+      <p>Further classifications involving data manipulation, financial fraud, and web hijacking.</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>4. Internet Time Theft</h4>
+          <p style="font-size:0.85rem; margin-bottom: 0;">
+            Unauthorized use of someone else's internet connection/hours. In dial-up or metered broadband eras, hackers stole access credentials to bypass service billing, resulting in financial loss for the victim.
+          </p>
+        </div>
+        <div class="info-callout" style="border-left-color: var(--accent-purple);">
+          <h4 style="color:var(--accent-purple);">5. Salami Attack / Salami Technique</h4>
+          <p style="font-size:0.85rem; margin-bottom: 0;">
+            A banking attack where a hacker shaves off tiny fractions of money (like $0.005) from thousands of customer interest payouts. The shaved amounts are routed into a hacker's vault. Because the loss to individual accounts is unnoticeable and below standard rounding thresholds, the crime goes undetected.
+          </p>
+        </div>
+      </div>
+
+      <div class="slide-grid-2">
+        <div class="info-callout" style="border-left-color: var(--warning-color);">
+          <h4 style="color:var(--warning-color);">6. Data Diddling</h4>
+          <p style="font-size:0.85rem; margin-bottom: 0;">
+            Altering or manipulating data *before* or *during* its entry into a computer system (e.g. changing retail prices in database forms or adjusting transaction sums before posting). The data is altered at the source, making the transaction appear valid on paper.
+          </p>
+        </div>
+        <div class="info-callout" style="border-left-color: var(--danger-color);">
+          <h4 style="color:var(--danger-color);">7. Web Jacking & Forgery</h4>
+          <p style="font-size:0.85rem; margin-bottom: 0;">
+            * **Web Jacking:** Hijacking website ownership or DNS records, redirecting visitors to a cloned malicious mirror (phishing clone).
+            <br>* **Forgery:** Creating fake digital certificates, signatures, or documents to commit identity theft or fraud.
+          </p>
+        </div>
+      </div>
+    `
+  },
+  {
+    title: "Syllabus Unit-II: Cyber Offenses Planning",
+    unit: "Unit-II",
+    content: `
+      <h2>Cyber Offenses: Planning Attacks <span class="slide-unit-badge">Unit-II</span></h2>
+      <p>Cybercriminals rarely strike immediately. They execute structured preparation stages before launching an attack.</p>
+      
+      <div class="math-box">
+        <p><strong>Categories of Cybercrime Targets:</strong></p>
+        1. **Against Individuals:** Defamation, stalking, identity theft, credit card fraud.
+        <br>2. **Against Property:** IP theft, hacking online databases, ransomware encryption.
+        <br>3. **Against Government:** Cyberterrorism, critical grid attacks, espionage.
+      </div>
+
+      <div class="info-callout">
+        <h4>The Three Main Steps of Attack Planning:</h4>
+        <ul class="slide-bullet-list">
+          <li><strong>1. Reconnaissance (Information Gathering):</strong> Finding targets, IP addresses, open ports, and operating system vulnerabilities.
+            <br>• *Passive Recon:* Snooping indirectly without interacting with targets (e.g. searching public WHOIS registers, scanning DNS).
+            <br>• *Active Recon:* Interacting directly to identify vulnerabilities (e.g. port scanning, ping sweeps).
+          </li>
+          <li><strong>2. Passive Attacks:</strong> Eavesdropping on communications to capture user data (e.g. packet sniffing, traffic analysis). No system changes occur.
+          </li>
+          <li><strong>3. Active Attacks:</strong> Modifying system files, introducing malware, or flooding resources (e.g. SQL Injection, Denial of Service, Phishing page redirections).
+          </li>
+        </ul>
+      </div>
+    `
+  },
+  {
+    title: "Syllabus Unit-II: Vulnerability Zones",
+    unit: "Unit-II",
+    content: `
+      <h2>Cybercafes & Cloud Computing <span class="slide-unit-badge">Unit-II</span></h2>
+      <p>Exam questions often cover the security implications of shared public spaces and cloud environments.</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>Cybercafe and Cybercrimes</h4>
+          <p style="font-size:0.88rem; margin-bottom: 0.5rem;">
+            Cybercafes are high-risk zones due to public sharing and lack of individual system monitoring:
+          </p>
+          <ul class="slide-bullet-list" style="margin-left:0.5rem; font-size:0.82rem; gap:0.25rem;">
+            <li><strong>Hardware Keyloggers:</strong> Tiny USB connectors plugged between the keyboard and PC that record all keystrokes (passwords).</li>
+            <li><strong>Cookie Stealing:</strong> Shared sessions allow hackers to scrape login cookies from browsers.</li>
+            <li><strong>Untrusted Wi-Fi:</strong> Cafes often run unencrypted routers where passive sniffing is easy.</li>
+          </ul>
+        </div>
+        <div class="info-callout" style="border-left-color: var(--accent-purple);">
+          <h4 style="color:var(--accent-purple);">Cybercrime and Cloud Computing</h4>
+          <p style="font-size:0.88rem; margin-bottom: 0.5rem;">
+            Cloud architectures aggregate massive data stores, attracting hackers:
+          </p>
+          <ul class="slide-bullet-list" style="margin-left:0.5rem; font-size:0.82rem; gap:0.25rem;">
+            <li><strong>Data Breaches:</strong> Misconfigured cloud buckets (AWS S3) expose private records to the public.</li>
+            <li><strong>API Hijacking:</strong> Vulnerable web interfaces allow remote exploit triggers.</li>
+            <li><strong>Hypervisor Attacks:</strong> Exploiting cloud virtualization to escape sandbox isolation.</li>
+          </ul>
+        </div>
+      </div>
+    `
+  },
+  {
+    title: "Syllabus Unit-III: Mobile Proliferation",
+    unit: "Unit-III",
+    content: `
+      <h2>Mobile & Wireless Computing Security <span class="slide-unit-badge">Unit-III</span></h2>
+      <p>Smartphones and wireless tablets have proliferated globally, creating massive security blind spots for corporations.</p>
+      
+      <div class="info-callout">
+        <h4>Key Mobile Security Proliferation Trends:</h4>
+        <ul class="slide-bullet-list" style="gap:0.5rem;">
+          <li><strong>BYOD (Bring Your Own Device) Policies:</strong> Companies allow employees to access corporate networks from personal devices, blending insecure personal apps with sensitive corporate data.</li>
+          <li><strong>Constant Wireless Access:</strong> Public Wi-Fi connectivity, Bluetooth discoverability, and cellular roaming bypass corporate firewalls.</li>
+          <li><strong>Insecure Storage:</strong> Mobile apps cache data locally without encryption, exposing tokens if the hardware is lost or stolen.</li>
+        </ul>
+      </div>
+
+      <div class="math-box">
+        <p><strong>Common Mobile Attack Vectors:</strong></p>
+        * **Skimming:** Reading data from RFID cards or phone NFC signals.
+        <br>* **Fake Apps:** Malicious clones on store catalogs masquerading as utilities.
+        <br>* **OS Jailbreaking:** Users rooting their operating systems, disabling key built-in sandbox security walls.
+      </div>
+    `
+  },
+  {
+    title: "Syllabus Unit-III: Credit Card Fraud",
+    unit: "Unit-III",
+    content: `
+      <h2>Credit Card Frauds in Mobile Era <span class="slide-unit-badge">Unit-III</span></h2>
+      <p>Credit card theft has evolved from physical card theft to sophisticated digital harvesting techniques.</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>Types of Credit Card Fraud:</h4>
+          <ul class="slide-bullet-list" style="margin-left:0.5rem; font-size:0.82rem; gap:0.25rem;">
+            <li><strong>Card-Not-Present (CNP) Fraud:</strong> Transactions where the physical card isn't required (online/mobile checkouts). Hackers need only card number, expiry, and CVV.</li>
+            <li><strong>RFID Skimming:</strong> Hackers use wireless readers to steal RFID details from contactless cards placed in pockets or purses.</li>
+            <li><strong>Page Hijacking:</strong> Redirecting checkout portals to fake credential harvest boxes.</li>
+          </ul>
+        </div>
+        <div class="info-callout" style="border-left-color: var(--accent-purple);">
+          <h4 style="color:var(--accent-purple);">Credit Card Theft Techniques:</h4>
+          <ul class="slide-bullet-list" style="margin-left:0.5rem; font-size:0.82rem; gap:0.25rem;">
+            <li><strong>Phishing/Vishing:</strong> Scams tricking victims into revealing card details via fake emails or phone calls.</li>
+            <li><strong>Keyloggers:</strong> Malware tracking screen taps or keystrokes to record credit card numbers.</li>
+            <li><strong>Bin Attacks:</strong> Programmatic brute-forcing of Card Verification Value (CVV) fields.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="info-callout" style="border-left-color:var(--success-color); margin-top:1rem;">
+        <h4>Mitigations:</h4>
+        Enforce Multi-Factor Authentication (MFA), virtual single-use cards, end-to-end tokenization, and dynamic CVVs.
+      </div>
+    `
+  },
+  {
+    title: "Syllabus Unit-III: Registry Hardening",
+    unit: "Unit-III",
+    content: `
+      <h2>Registry Hardening & Mobile Policies <span class="slide-unit-badge">Unit-III</span></h2>
+      <p>Securing mobile hardware requires hardening configuration settings. Historically, Windows Mobile devices are hardened by modifying the system registry database.</p>
+      
+      <div class="math-box">
+        <p><strong>Crucial Registry Settings (Exam Memorization):</strong></p>
+        1. **Disable Bluetooth Discoverability:** Stops scanning/connection attacks.
+        <span class="code-line">Key: HKLM\\Comm\\Conn\\BT</span>
+        <span class="code-line">Value: Discoverable = 0</span>
+        2. **Enforce Device Lock Passwords:**
+        <span class="code-line">Key: HKLM\\Security\\Policies</span>
+        <span class="code-line">Value: PasswordRequired = 1</span>
+        3. **Block Unsigned CAB installations (Prevent malware packages):**
+        <span class="code-line">Key: HKLM\\Security\\Policies</span>
+        <span class="code-line">Value: BlockUnsignedCAB = 1</span>
+      </div>
+
+      <div class="info-callout" style="border-left-color:var(--success-color);">
+        <h4>Organizational Guidelines for Laptops & Mobile Security:</h4>
+        • **MDM (Mobile Device Management):** Enterprise systems to remotely configure password parameters, track hardware, and wipe memory blocks.
+        <br>• **Containerization:** Splitting device storage into encrypted workspace blocks (managed by IT) and personal blocks.
+        <br>• **USB Blocker policies:** Restricting USB debug keys to prevent juice jacking.
+      </div>
+    `
+  }
+];
+
+// Cyber Security Flashcards Database
+const flashcardsDataCS = [
+  {
+    category: "Unit-I: Cybercrime Basics",
+    question: "Explain the origin of the word <strong>'Cyber'</strong>.",
+    answer: "The prefix 'cyber' comes from Wiener's 1948 term <strong>'Cybernetics'</strong>, which described automated communication and control systems. Today, 'cyber' is used to represent anything connected to computers, networks, or digital space."
+  },
+  {
+    category: "Unit-I: Criminal Personas",
+    question: "Differentiate between a <strong>Script Kiddie</strong> and an <strong>Insider Threat</strong>.",
+    answer: "<ul><li><strong>Script Kiddie:</strong> An amateur attacker who uses pre-written hacking scripts developed by others, lacking deep coding knowledge.</li><li><strong>Insider Threat:</strong> An employee, former employee, or contractor who has authorized system access. They pose a higher risk because they know system architectures and bypass outer firewalls easily.</li></ul>"
+  },
+  {
+    category: "Unit-I: Classifications",
+    question: "Define the <strong>Salami Technique</strong> / Salami Attack.",
+    answer: "A financial attack where a perpetrator shaves off tiny fractions of money (like $0.005) from thousands of bank transactions. Because the individual shaved sums are too small to notice or alert account holders, the cumulative profit aggregates silently in the attacker's vault without triggering audit flags."
+  },
+  {
+    category: "Unit-I: Classifications",
+    question: "What is the difference between <strong>Data Diddling</strong> and <strong>Web Jacking</strong>?",
+    answer: "<ul><li><strong>Data Diddling:</strong> Altering source data *before* or *during* entry into the computer system (e.g. typing a lower product price into a database input form).</li><li><strong>Web Jacking:</strong> Hijacking website servers or DNS parameters to redirect users to a fraudulent clone page (phishing site).</li></ul>"
+  },
+  {
+    category: "Unit-I: Classifications",
+    question: "Explain <strong>Internet Time Theft</strong>.",
+    answer: "Unauthorized use of someone else's internet connection or paid hours. Historically common in dial-up and metered connection eras, hackers stole access credentials to browse the web at the victim's expense."
+  },
+  {
+    category: "Unit-II: Cyber Offenses",
+    question: "Classify cybercrimes based on targets.",
+    answer: "Cybercrimes are classified into three target categories:<ul><li><strong>1. Against Individuals:</strong> Cyberstalking, harassment, identity theft, credit card frauds.</li><li><strong>2. Against Property:</strong> Database intrusion, IP piracy, ransomware, site hacking.</li><li><strong>3. Against Government:</strong> Cyberterrorism, critical infrastructure attacks, state espionage.</li></ul>"
+  },
+  {
+    category: "Unit-II: Attack Planning",
+    question: "What are **Passive Reconnaissance** and **Active Reconnaissance**?",
+    answer: "Reconnaissance is the initial data gathering phase:<ul><li><strong>Passive Recon:</strong> Scanning the target without direct interaction (e.g. searching WHOIS directories, DNS records, public search engines).</li><li><strong>Active Recon:</strong> Interacting directly with the target network to find holes (e.g. port scanning, ping sweeps, banner grabbing).</li></ul>"
+  },
+  {
+    category: "Unit-II: Attack Planning",
+    question: "Differentiate between **Passive Attacks** and **Active Attacks**.",
+    answer: "<ul><li><strong>Passive Attack:</strong> Attacker eavesdrops to capture traffic data without changing system states (e.g. packet sniffing, traffic analysis). CIA impact: Loss of Confidentiality.</li><li><strong>Active Attack:</strong> Attacker interacts to modify files, alter traffic, or disrupt services (e.g. SQL Injection, DoS, malware injection). CIA impact: Loss of Integrity and Availability.</li></ul>"
+  },
+  {
+    category: "Unit-II: Attack Planning",
+    question: "Why are **Cybercafes** hotbeds for cybercrime?",
+    answer: "Cybercafes have shared systems that lack access monitoring and contain vulnerabilities:<ul><li>Hardware keyloggers can be plugged behind keyboards to capture inputs.</li><li>Shared browser sessions expose cookies and access keys to subsequent users.</li><li>Public unencrypted Wi-Fi allows easy passive sniffing of user sessions.</li></ul>"
+  },
+  {
+    category: "Unit-III: Mobile Security",
+    question: "Explain **RFID Skimming** in credit card fraud.",
+    answer: "RFID Skimming is a wireless theft technique where an attacker uses an RFID/NFC reader near a victim to scan and clone the card numbers and details from contactless credit cards or mobile payment chips without physical contact."
+  },
+  {
+    category: "Unit-III: Mobile Security",
+    question: "Define **CNP Fraud**.",
+    answer: "**Card-Not-Present (CNP) Fraud** occurs during online, telephone, or mobile checkout transactions where the physical card does not need to be swiped. Attackers commit CNP fraud using card metadata (card number, expiry, CVV) harvested via phishing, databases, or keyloggers."
+  },
+  {
+    category: "Unit-III: Mobile Security",
+    question: "What is **BYOD** and what security challenges does it present?",
+    answer: "**Bring Your Own Device (BYOD)** is a policy allowing employees to use personal devices for work. Challenges: unmanaged personal apps can leak corporate data, lack of company encryption policies on personal hardware, and the inability to wipe devices without deleting personal photos/records."
+  },
+  {
+    category: "Unit-III: Registry settings",
+    question: "Name 3 Windows Mobile Registry settings for device hardening.",
+    answer: "<ul><li><strong>Disable Bluetooth Discoverability:</strong> Set HKLM\\Comm\\Conn\\BT: <code>Discoverable = 0</code></li><li><strong>Enforce Password Lock:</strong> Set HKLM\\Security\\Policies: <code>PasswordRequired = 1</code></li><li><strong>Block Unsigned CAB installs:</strong> Set HKLM\\Security\\Policies: <code>BlockUnsignedCAB = 1</code></li></ul>"
+  },
+  {
+    category: "Unit-III: Laptop & Mobile Policies",
+    question: "Explain the role of **MDM (Mobile Device Management)** systems.",
+    answer: "MDM is an enterprise administration system that enforces compliance policies on mobile hardware (e.g. requiring device passwords, tracking physical device coordinates, encrypting containerized storage, and enabling remote wipe commands if a laptop/phone is lost)."
+  }
+];
+
+// ==========================================
+// CYBER SECURITY THREAT SIMULATORS LOGIC
+// ==========================================
+let csSimInterval = null;
+let csSimState = {
+  activeThreat: 'salami-attack',
+  isRunning: false,
+  auditLogs: []
+};
+
+// Main Run Switcher
+function initCsThreatSimulators() {
+  const threatSelect = document.getElementById('threat-select');
+  const playBtn = document.getElementById('threat-btn-play');
+  const resetBtn = document.getElementById('threat-btn-reset');
+  const auditLogEl = document.getElementById('threat-audit-log');
+  
+  // Select panel togglers
+  threatSelect.addEventListener('change', () => {
+    const active = threatSelect.value;
+    csSimState.activeThreat = active;
+    
+    // Title & subtitle mapping
+    const titleMap = {
+      'salami-attack': 'Salami Attack Simulator',
+      'packet-sniffer': 'Passive Packet Sniffer (Wi-Fi router)',
+      'mobile-registry': 'Mobile Device Registry hardener'
+    };
+    document.getElementById('threat-title').textContent = titleMap[active];
+    document.getElementById('threat-subtitle').textContent = 'Awaiting Simulation...';
+    
+    // Toggle Inputs
+    document.querySelectorAll('.threat-inputs-panel').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.threat-screen-view').forEach(el => el.classList.add('hidden'));
+    
+    if (active === 'salami-attack') {
+      document.getElementById('threat-inputs-salami').classList.remove('hidden');
+      document.getElementById('threat-render-salami').classList.remove('hidden');
+    } else if (active === 'packet-sniffer') {
+      document.getElementById('threat-inputs-sniffer').classList.remove('hidden');
+      document.getElementById('threat-render-sniffer').classList.remove('hidden');
+    } else if (active === 'mobile-registry') {
+      document.getElementById('threat-inputs-registry').classList.remove('hidden');
+      document.getElementById('threat-render-registry').classList.remove('hidden');
+      updateRegistryDashboard(); // Draw scanner status
+    }
+    
+    resetCsSimulators();
+  });
+  
+  // Simulation play triggers
+  playBtn.addEventListener('click', () => {
+    if (csSimState.isRunning) {
+      pauseCsSimulation();
+    } else {
+      runCsSimulation();
+    }
+  });
+  
+  resetBtn.addEventListener('click', resetCsSimulators);
+  
+  // Setup Registry triggers
+  document.querySelectorAll('#threat-inputs-registry input').forEach(inp => {
+    inp.addEventListener('change', updateRegistryDashboard);
+  });
+}
+
+function runCsSimulation() {
+  csSimState.isRunning = true;
+  document.getElementById('threat-btn-play').textContent = 'Pause Simulation';
+  
+  const threat = csSimState.activeThreat;
+  if (threat === 'salami-attack') {
+    runSalamiSimulation();
+  } else if (threat === 'packet-sniffer') {
+    runSnifferSimulation();
+  } else if (threat === 'mobile-registry') {
+    runRegistryScanSimulation();
+  }
+}
+
+function pauseCsSimulation() {
+  csSimState.isRunning = false;
+  document.getElementById('threat-btn-play').textContent = 'Run Simulation';
+  clearInterval(csSimInterval);
+}
+
+function resetCsSimulators() {
+  pauseCsSimulation();
+  document.getElementById('threat-audit-log').textContent = 'Awaiting simulation start...';
+  document.getElementById('salami-ledger-body').innerHTML = '';
+  
+  // Reset sniffer packet animation
+  const dot = document.getElementById('sniff-packet-dot');
+  if (dot) {
+    dot.classList.add('hidden');
+    dot.setAttribute('cx', '80');
+    dot.setAttribute('cy', '110');
+  }
+  document.getElementById('sniffer-log-screen').innerHTML = '[System Ready] Click "Run Simulation" to capture packets.';
+  
+  if (csSimState.activeThreat === 'mobile-registry') {
+    updateRegistryDashboard();
+  }
+}
+
+// 1. Salami Technique Simulation
+function runSalamiSimulation() {
+  const ledger = document.getElementById('salami-ledger-body');
+  const shave = parseFloat(document.getElementById('salami-shave').value);
+  const totalTx = parseInt(document.getElementById('salami-accounts').value);
+  const logEl = document.getElementById('threat-audit-log');
+  
+  ledger.innerHTML = '';
+  let count = 0;
+  let totalHackerProfit = 0;
+  
+  document.getElementById('threat-subtitle').textContent = `Processing Interest Payouts (0/${totalTx})...`;
+  
+  csSimInterval = setInterval(() => {
+    if (count < totalTx) {
+      count += 50; // increment in blocks for animation speed
+      const accId = 1000 + Math.floor(count);
+      
+      // Calculate shaved sums
+      const baseInterest = 10 + Math.random() * 5; // e.g. 12.3557
+      const roundedInterest = Math.floor(baseInterest * 100) / 100; // e.g. 12.35 (banking truncation)
+      const residual = baseInterest - roundedInterest; // e.g. 0.0057
+      
+      const actualShaved = shave;
+      totalHackerProfit += actualShaved * 50;
+      
+      // Append row to ledger (show first few entries)
+      if (ledger.children.length < 8) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>#${accId}</td>
+          <td>$${baseInterest.toFixed(4)}</td>
+          <td>$${roundedInterest.toFixed(2)}</td>
+          <td style="color:var(--danger-color); font-weight:bold;">$${actualShaved.toFixed(3)}</td>
+          <td style="color:var(--success-color);">Processed</td>
+        `;
+        ledger.appendChild(tr);
+      }
+      
+      document.getElementById('threat-subtitle').textContent = `Processing Transactions (${count}/${totalTx})...`;
+      logEl.innerHTML = `
+        <strong>Salami technique audit tracking:</strong>
+        <br>Processed accounts: ${count}
+        <br>Shaved sum per Account transaction: $${shave.toFixed(3)}
+        <br>Accumulated Hacker Vault Balance: <span style="color:var(--primary-color); font-weight:bold;">$${totalHackerProfit.toFixed(3)}</span>
+      `;
+    } else {
+      pauseCsSimulation();
+      document.getElementById('threat-subtitle').textContent = `Completed processing ${totalTx} transactions.`;
+      logEl.innerHTML += `
+        <br><br><span class="status-vuln">⚠️ SECURITY ALERT:</span> A Salami Attack gathered <strong>$${totalHackerProfit.toFixed(2)}</strong> from ${totalTx} payouts. Mismatch went undetected because individual balances were only truncated at $${shave.toFixed(3)} boundaries.
+      `;
+    }
+  }, 100);
+}
+
+// 2. Packet Sniffer Simulation
+function runSnifferSimulation() {
+  const dot = document.getElementById('sniff-packet-dot');
+  const isEncrypted = document.getElementById('sniffer-encrypt').checked;
+  const consoleEl = document.getElementById('sniffer-log-screen');
+  const logEl = document.getElementById('threat-audit-log');
+  
+  dot.classList.remove('hidden');
+  dot.setAttribute('cx', '80');
+  dot.setAttribute('cy', '110');
+  
+  let t = 0;
+  consoleEl.innerHTML = `[CONNECTION] Resolving secure router tunnel gateway...<br>[ROUTING] Emitting packet stream...`;
+  
+  csSimInterval = setInterval(() => {
+    t += 0.05;
+    if (t <= 1.0) {
+      // Step 1: Move user to router: x from 80 to 250
+      const cx = 80 + (250 - 80) * t;
+      dot.setAttribute('cx', cx);
+    } else if (t <= 2.0) {
+      // Step 2: Branch router to server: x from 250 to 410
+      const t2 = t - 1.0;
+      const cx = 250 + (410 - 250) * t2;
+      dot.setAttribute('cx', cx);
+      
+      if (t2 < 0.1) {
+        consoleEl.innerHTML += `<br>[ROUTING] Passing router. Attacker sniffing port active...`;
+      }
+    } else {
+      // Completed routing
+      dot.classList.add('hidden');
+      clearInterval(csSimInterval);
+      
+      if (!isEncrypted) {
+        consoleEl.innerHTML += `
+          <br><span style="color:var(--danger-color);">[SNIFF] CRITICAL: Captured unencrypted payload!</span>
+          <br>  -> DATA: { card_no: "4321 0987 6543 2100", exp: "12/28", cvv: "901" }
+          <br>  -> user: "mihir_aditya"
+        `;
+        logEl.innerHTML = `
+          <span class="status-vuln">❌ Sniffer Attack Successful:</span> Capturing raw text payload.
+          <br><strong>Root Cause:</strong> HTTP unencrypted session. An eavesdropper (Passive Attack) has harvested complete credit card numbers and passwords!
+        `;
+      } else {
+        consoleEl.innerHTML += `
+          <br><span style="color:var(--success-color);">[SNIFF] SECURE: Captured TLS packet.</span>
+          <br>  -> Payload: "9d8e7c10b2a3f0ef98cd01235b88abcf..." (Ciphertext)
+        `;
+        logEl.innerHTML = `
+          <span class="status-safe">✅ Secure Session (TLS active):</span> Packet intercepted.
+          <br><strong>Security Mitigation:</strong> Sniffer captured packet, but TLS (HTTPS) encryption prevented reading credentials.
+        `;
+      }
+      csSimState.isRunning = false;
+      document.getElementById('threat-btn-play').textContent = 'Run Simulation';
+    }
+  }, 50);
+}
+
+// 3. Mobile Registry Hardening Rating
+function updateRegistryDashboard() {
+  const btHard = document.getElementById('reg-bluetooth').checked;
+  const passHard = document.getElementById('reg-passwd').checked;
+  const cabHard = document.getElementById('reg-cab').checked;
+  
+  const vulnList = document.getElementById('reg-vuln-container');
+  const scoreVal = document.getElementById('reg-security-score');
+  const scoreBar = document.getElementById('reg-score-bar');
+  
+  vulnList.innerHTML = '';
+  let score = 10;
+  
+  // Hardening check 1: Bluetooth
+  if (btHard) {
+    score += 30;
+    vulnList.innerHTML += `
+      <div class="registry-vuln-item">
+        <span class="registry-vuln-title">Bluetooth Discoverability (BT: Discoverable=0)</span>
+        <span class="registry-vuln-status status-safe">SECURED</span>
+      </div>
+    `;
+  } else {
+    vulnList.innerHTML += `
+      <div class="registry-vuln-item" style="border-color:rgba(255,8,68,0.25);">
+        <span class="registry-vuln-title">Bluetooth discoverable is active (BT: Discoverable=1)</span>
+        <span class="registry-vuln-status status-vuln">VULNERABLE (Bluejacking threat)</span>
+      </div>
+    `;
+  }
+  
+  // Hardening check 2: Passwords
+  if (passHard) {
+    score += 30;
+    vulnList.innerHTML += `
+      <div class="registry-vuln-item">
+        <span class="registry-vuln-title">Device Lock Authentication (Policies: PasswordRequired=1)</span>
+        <span class="registry-vuln-status status-safe">SECURED</span>
+      </div>
+    `;
+  } else {
+    vulnList.innerHTML += `
+      <div class="registry-vuln-item" style="border-color:rgba(255,8,68,0.25);">
+        <span class="registry-vuln-title">No local screen password forced (Policies: PasswordRequired=0)</span>
+        <span class="registry-vuln-status status-vuln">VULNERABLE (Physical compromise)</span>
+      </div>
+    `;
+  }
+  
+  // Hardening check 3: Signed CAB
+  if (cabHard) {
+    score += 30;
+    vulnList.innerHTML += `
+      <div class="registry-vuln-item">
+        <span class="registry-vuln-title">CAB Installation policy (Policies: BlockUnsignedCAB=1)</span>
+        <span class="registry-vuln-status status-safe">SECURED</span>
+      </div>
+    `;
+  } else {
+    vulnList.innerHTML += `
+      <div class="registry-vuln-item" style="border-color:rgba(255,8,68,0.25);">
+        <span class="registry-vuln-title">Unsigned CAB installation allowed (Policies: BlockUnsignedCAB=0)</span>
+        <span class="registry-vuln-status status-vuln">VULNERABLE (Malware execution risk)</span>
+      </div>
+    `;
+  }
+  
+  // Update gauge UI
+  scoreVal.textContent = `${score}% ${score === 100 ? '(Secured)' : score >= 70 ? '(Medium Risk)' : '(Vulnerable)'}`;
+  if (score === 100) {
+    scoreVal.style.color = 'var(--success-color)';
+    scoreBar.style.background = 'var(--success-gradient)';
+  } else if (score >= 70) {
+    scoreVal.style.color = 'var(--warning-color)';
+    scoreBar.style.background = 'var(--warning-color)';
+  } else {
+    scoreVal.style.color = 'var(--danger-color)';
+    scoreBar.style.background = 'var(--danger-gradient)';
+  }
+  scoreBar.style.width = `${score}%`;
+}
+
+function runRegistryScanSimulation() {
+  const audit = document.getElementById('threat-audit-log');
+  audit.innerHTML = `[SCAN] Checking device configuration registry keys...`;
+  
+  setTimeout(() => {
+    updateRegistryDashboard();
+    const btHard = document.getElementById('reg-bluetooth').checked;
+    const passHard = document.getElementById('reg-passwd').checked;
+    const cabHard = document.getElementById('reg-cab').checked;
+    
+    if (btHard && passHard && cabHard) {
+      audit.innerHTML = `<span class="status-safe">✅ DEVICE SCAN SECURED:</span> Registry database matches security policies. Device is hardened against wireless sniffing, physical theft bypasses, and unsigned malware cabinet installation.`;
+    } else {
+      audit.innerHTML = `<span class="status-vuln">⚠️ WARNING: Registry vulnerabilities discovered!</span> Check the dashboard list above. Toggle registry switches to set values to secure parameters (Discoverable=0, PasswordRequired=1, BlockUnsignedCAB=1) to harden the platform.`;
+    }
+    
+    csSimState.isRunning = false;
+    document.getElementById('threat-btn-play').textContent = 'Run Simulation';
+  }, 800);
+}
+
+// ==========================================
+// SUBJECT SWITCHER CONTROLLER
+// ==========================================
+function initSubjectSwitcher() {
+  const subjectSelect = document.getElementById('subject-select');
+  const cprogramsNavBtn = document.getElementById('nav-cprograms');
+  
+  subjectSelect.addEventListener('change', (e) => {
+    activeSubject = e.target.value;
+    
+    // Toggle slidesData pointer
+    if (activeSubject === 'cg') {
+      slidesData = slidesDataCG;
+      flashcardsData = flashcardsDataCG;
+      
+      // Show C Programs Tab
+      cprogramsNavBtn.classList.remove('hidden');
+      
+      // Visualizer container toggler
+      document.getElementById('cg-visualizer-container').classList.remove('hidden');
+      document.getElementById('cs-visualizer-container').classList.add('hidden');
+    } else if (activeSubject === 'cs') {
+      slidesData = slidesDataCS;
+      flashcardsData = flashcardsDataCS;
+      
+      // Hide C Programs Tab (not applicable to Cyber Security)
+      cprogramsNavBtn.classList.add('hidden');
+      
+      // Switch active tab if user was on C Programs
+      const activeNavTab = document.querySelector('.nav-btn.active');
+      if (activeNavTab && activeNavTab.getAttribute('data-tab') === 'cprograms') {
+        document.getElementById('nav-slides').click();
+      }
+      
+      // Visualizer container toggler
+      document.getElementById('cg-visualizer-container').classList.add('hidden');
+      document.getElementById('cs-visualizer-container').classList.remove('hidden');
+    }
+    
+    // Refresh slideshow list and load first slide
+    initSlideshow();
+    
+    // Refresh flashcards progress and index
+    localStorage.removeItem('cg_flashcard_states'); // Clear caching across subject toggle
+    initFlashcards();
+    
+    // Trigger resize for layout rendering yokes
+    window.dispatchEvent(new Event('resize'));
+  });
+}
+
 // ==========================================
 // MAIN INITIALIZATION ON DOM LOADED
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
   initTabs();
+  initSubjectSwitcher(); // Register course selection listener
   initSlideshow();
   initFlashcards();
   initVisualizer();
   initCPrograms();
+  initCsThreatSimulators(); // Register cyber security visualizer simulations
 });
+

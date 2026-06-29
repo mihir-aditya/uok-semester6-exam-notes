@@ -19,6 +19,15 @@
         <p>Unit I & II Master Class</p>
       </div>
     </div>
+
+    <!-- Dynamic Subject Selector Dropdown -->
+    <div class="subject-selector-wrapper">
+      <label for="subject-select">Active Course:</label>
+      <select id="subject-select" class="form-control subject-select-dropdown">
+        <option value="cg" selected>Computer Graphics & Lab</option>
+        <option value="cs">IMCA605T Cyber Security & Crime</option>
+      </select>
+    </div>
     
     <nav class="app-nav">
       <button class="nav-btn active" data-tab="slides" id="nav-slides">
@@ -168,7 +177,9 @@
 
     <!-- 3. VISUALIZERS SECTION -->
     <section id="visualizers-section" class="tab-content">
-      <div class="visualizer-layout">
+      <!-- CG Visualizers Content -->
+      <div id="cg-visualizer-container" style="width: 100%;">
+        <div class="visualizer-layout">
         <!-- Sidebar Controls -->
         <div class="visualizer-controls-panel">
           <h3>Algorithm Settings</h3>
@@ -335,6 +346,165 @@
                   <!-- Dynamic trace logs -->
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- Cyber Security Threat Simulators Content -->
+      <div id="cs-visualizer-container" class="hidden" style="width: 100%;">
+        <div class="visualizer-layout">
+          <!-- Sidebar controls -->
+          <div class="visualizer-controls-panel">
+            <h3>Threat Simulators</h3>
+            <div class="form-group">
+              <label for="threat-select">Select Threat Vector</label>
+              <select id="threat-select" class="form-control">
+                <option value="salami-attack" selected>Salami Attack (Unit-I)</option>
+                <option value="packet-sniffer">Passive Packet Sniffing (Unit-II)</option>
+                <option value="mobile-registry">Mobile Device Registry Hardener (Unit-III)</option>
+              </select>
+            </div>
+            
+            <!-- Parameters dynamic forms -->
+            <div id="threat-inputs-salami" class="threat-inputs-panel">
+              <p class="input-note">
+                Salami Technique: Shaving off tiny amounts (like $0.005) from multiple interest payouts.
+              </p>
+              <div class="form-group">
+                <label>Shave Amount per Tx ($)</label>
+                <input type="number" id="salami-shave" value="0.005" step="0.001" min="0.001" max="0.100" class="form-control">
+              </div>
+              <div class="form-group">
+                <label>Total Account Transactions</label>
+                <input type="number" id="salami-accounts" value="1000" min="100" max="5000" step="100" class="form-control">
+              </div>
+            </div>
+
+            <div id="threat-inputs-sniffer" class="threat-inputs-panel hidden">
+              <p class="input-note">
+                Sniffing captures unencrypted packets crossing a local router. Toggle encryption to see how HTTPS prevents data leaks.
+              </p>
+              <div class="form-group">
+                <label class="param-radio-label" style="display:flex; align-items:center; gap:0.5rem;">
+                  <input type="checkbox" id="sniffer-encrypt"> Enable HTTPS Encryption (SSL/TLS)
+                </label>
+              </div>
+            </div>
+
+            <div id="threat-inputs-registry" class="threat-inputs-panel hidden">
+              <p class="input-note">
+                Registry settings control mobile device security policies. Toggle keys below to scan and harden your device.
+              </p>
+              <div class="form-group">
+                <label class="param-radio-label" style="display:flex; align-items:center; gap:0.5rem; font-size:0.75rem;">
+                  <input type="checkbox" id="reg-bluetooth" checked> HKLM\\Comm\\Conn\\BT: Discoverable = 0
+                </label>
+              </div>
+              <div class="form-group">
+                <label class="param-radio-label" style="display:flex; align-items:center; gap:0.5rem; font-size:0.75rem;">
+                  <input type="checkbox" id="reg-passwd"> HKLM\\Security\\Policies: PasswordRequired = 1
+                </label>
+              </div>
+              <div class="form-group">
+                <label class="param-radio-label" style="display:flex; align-items:center; gap:0.5rem; font-size:0.75rem;">
+                  <input type="checkbox" id="reg-cab"> HKLM\\Security\\Policies: BlockUnsignedCAB = 1
+                </label>
+              </div>
+            </div>
+            
+            <!-- Controls -->
+            <div class="visualizer-actions">
+              <button class="btn btn-primary" id="threat-btn-play">Run Simulation</button>
+              <button class="btn btn-danger" id="threat-btn-reset">Reset</button>
+            </div>
+          </div>
+
+          <!-- Simulation Screen -->
+          <div class="visualizer-display-panel">
+            <div class="grid-card">
+              <div class="grid-card-header">
+                <h3 id="threat-title">Salami Attack Simulator</h3>
+                <div class="grid-resolution" id="threat-subtitle">Processing Payouts...</div>
+              </div>
+              <div class="grid-viewport" style="background:#0a0e17; padding: 1rem; border:1px solid var(--border-color); min-height: 320px; align-items:flex-start;">
+                <!-- HTML / SVG custom render areas for each simulator -->
+                <div id="threat-render-salami" class="threat-screen-view" style="width:100%;">
+                  <!-- Ledger table container -->
+                  <div class="table-container" style="max-height: 250px;">
+                    <table class="trace-table" style="font-size:0.8rem; width:100%;">
+                      <thead>
+                        <tr>
+                          <th>Account ID</th>
+                          <th>Orig Interest</th>
+                          <th>Actual Payout</th>
+                          <th>Shaved Amount</th>
+                          <th>Audit Status</th>
+                        </tr>
+                      </thead>
+                      <tbody id="salami-ledger-body">
+                        <!-- Populated dynamically -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                <div id="threat-render-sniffer" class="threat-screen-view hidden" style="width:100%;">
+                  <svg viewBox="0 0 500 220" style="width:100%; height:auto;">
+                    <!-- User Phone -->
+                    <rect x="20" y="70" width="60" height="80" rx="8" fill="#151b26" stroke="#4facfe" stroke-width="1.5"/>
+                    <text x="50" y="114" class="svg-text" font-size="9px">User Mobile</text>
+                    
+                    <!-- Router -->
+                    <circle cx="250" cy="110" r="28" fill="#151b26" stroke="white" stroke-width="1.5"/>
+                    <text x="250" y="114" class="svg-text" font-size="9px">Wi-Fi Router</text>
+                    
+                    <!-- Server -->
+                    <rect x="410" y="70" width="70" height="80" rx="4" fill="#151b26" stroke="#00ff87" stroke-width="1.5"/>
+                    <text x="445" y="114" class="svg-text" font-size="9px">Bank Server</text>
+                    
+                    <!-- Attacker (Sniffer) below -->
+                    <rect x="210" y="175" width="80" height="35" rx="4" fill="#151b26" stroke="#ff0844" stroke-width="1.5"/>
+                    <text x="250" y="195" class="svg-text" font-size="9px" fill="#ff0844">Attacker (Sniffer)</text>
+                    
+                    <!-- Routing arrows -->
+                    <path d="M 80 110 L 222 110" stroke="#a0aec0" stroke-width="2" id="packet-path-1" stroke-dasharray="4"/>
+                    <path d="M 278 110 L 410 110" stroke="#a0aec0" stroke-width="2" id="packet-path-2" stroke-dasharray="4"/>
+                    <path d="M 250 138 L 250 175" stroke="#ff0844" stroke-width="1.5" stroke-dasharray="3" id="sniffer-path"/>
+                    
+                    <!-- Packets flying -->
+                    <circle cx="80" cy="110" r="5" fill="#4facfe" id="sniff-packet-dot" class="hidden"/>
+                  </svg>
+                  
+                  <div id="sniffer-log-screen" style="font-family:var(--font-mono); font-size:0.75rem; background:#05080c; border:1px solid var(--border-color); border-radius:6px; padding:0.6rem; margin-top:0.75rem; min-height:100px; max-height:130px; overflow-y:auto; color:var(--color-text-secondary); width:100%;">
+                    [System Ready] Click "Run Simulation" to capture packets.
+                  </div>
+                </div>
+
+                <div id="threat-render-registry" class="threat-screen-view hidden" style="width:100%;">
+                  <div class="registry-dashboard" style="width:100%;">
+                    <div class="security-score-gauge" style="display:flex; justify-content:space-between; font-weight:600; font-size:0.9rem;">
+                      <span class="gauge-label">Security Posture Score:</span>
+                      <span class="gauge-value" id="reg-security-score" style="color:var(--danger-color);">10% (Vulnerable)</span>
+                    </div>
+                    <div class="score-progress-bar-container" style="width:100%; height:8px; background:#101520; border-radius:4px; margin: 0.5rem 0 1.25rem 0; overflow:hidden;">
+                      <div id="reg-score-bar" style="width:10%; height:100%; background:var(--danger-gradient); border-radius:4px; transition:width 0.3s ease;"></div>
+                    </div>
+                    <div class="registry-vuln-list" id="reg-vuln-container" style="display:flex; flex-direction:column; gap:0.5rem;">
+                      <!-- Populated dynamically -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Threat Simulator Logs -->
+            <div class="trace-card">
+              <h3>Simulation Audit Logs</h3>
+              <div class="trace-summary" id="threat-audit-log">
+                Awaiting simulation start...
+              </div>
             </div>
           </div>
         </div>
