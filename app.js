@@ -1896,6 +1896,1262 @@ function initVisualizer() {
 }
 
 // ==========================================
+// 4. C LAB PROGRAMS & EMULATOR SIMULATOR
+// ==========================================
+
+const cprogramsData = [
+  {
+    id: "translation-2d",
+    title: "1. 2D Translation of an Object",
+    fileName: "TRANS2D.C",
+    desc: "2D Translation shifts an object from position (x, y) to a new position (x', y') by adding translation distances tx and ty. Formulas: x' = x + tx, y' = y + ty.",
+    code: `/* 
+   2D Translation of a Triangle in graphics.h 
+   Compatible with Turbo C++ / Turbo C 3.0 BGI
+*/
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+
+void main() {
+    int gd = DETECT, gm;
+    int x1 = 150, y1 = 150;
+    int x2 = 250, y2 = 150;
+    int x3 = 200, y3 = 250;
+    int tx, ty;
+    
+    printf("Enter translation factors tx and ty: ");
+    scanf("%d %d", &tx, &ty);
+    
+    /* Initialize graphics mode */
+    initgraph(&gd, &gm, "C:\\\\TURBOC3\\\\BGI");
+    
+    /* Draw Original Triangle in WHITE */
+    setcolor(WHITE);
+    line(x1, y1, x2, y2);
+    line(x2, y2, x3, y3);
+    line(x3, y3, x1, y1);
+    outtextxy(x1 - 10, y1 - 15, "Original");
+    
+    /* Draw Translated Triangle in CYAN */
+    setcolor(CYAN);
+    line(x1 + tx, y1 + ty, x2 + tx, y2 + ty);
+    line(x2 + tx, y2 + ty, x3 + tx, y3 + ty);
+    line(x3 + tx, y3 + ty, x1 + tx, y1 + ty);
+    outtextxy(x1 + tx - 10, y1 + ty - 15, "Translated");
+    
+    getch();
+    closegraph();
+}`,
+    inputs: [
+      { id: "tx", label: "Translation Tx", type: "range", min: -100, max: 200, val: 100 },
+      { id: "ty", label: "Translation Ty", type: "range", min: -100, max: 200, val: 50 }
+    ],
+    draw: function(ctx, w, h, params) {
+      const tx = parseInt(params.tx);
+      const ty = parseInt(params.ty);
+      
+      const x1 = 150, y1 = 150;
+      const x2 = 250, y2 = 150;
+      const x3 = 200, y3 = 250;
+      
+      // Draw original (dashed grey)
+      ctx.strokeStyle = "#555555";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.lineTo(x3, y3); ctx.closePath();
+      ctx.stroke();
+      ctx.fillStyle = "#888888";
+      ctx.fillText("Original", x1 - 10, y1 - 10);
+      
+      // Draw translated (cyan)
+      ctx.strokeStyle = "#00f2fe";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(x1 + tx, y1 + ty);
+      ctx.lineTo(x2 + tx, y2 + ty);
+      ctx.lineTo(x3 + tx, y3 + ty);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.fillStyle = "#00f2fe";
+      ctx.fillText("Translated", x1 + tx - 10, y1 + ty - 10);
+      
+      // Draw translation vectors
+      ctx.strokeStyle = "rgba(155, 81, 224, 0.4)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1); ctx.lineTo(x1 + tx, y1 + ty);
+      ctx.moveTo(x2, y2); ctx.lineTo(x2 + tx, y2 + ty);
+      ctx.moveTo(x3, y3); ctx.lineTo(x3 + tx, y3 + ty);
+      ctx.stroke();
+    }
+  },
+  {
+    id: "rotation-2d",
+    title: "2. 2D Rotation of an Object",
+    fileName: "ROTATE.C",
+    desc: "2D Rotation rotates an object by angle θ about a pivot point (xr, yr). Formulas: x' = xr + (x-xr)cosθ - (y-yr)sinθ, y' = yr + (x-xr)sinθ + (y-yr)cosθ.",
+    code: `/* 
+   2D Rotation of a Triangle about a Pivot Point 
+   Compatible with Turbo C++ / Turbo C 3.0 BGI
+*/
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+#include <math.h>
+
+void main() {
+    int gd = DETECT, gm;
+    int x1 = 300, y1 = 200;
+    int x2 = 400, y2 = 200;
+    int x3 = 350, y3 = 100;
+    
+    /* Pivot point is (300, 200) */
+    int xr = 300, yr = 200; 
+    float angle, rad;
+    int rx1, ry1, rx2, ry2, rx3, ry3;
+    
+    printf("Enter rotation angle in degrees: ");
+    scanf("%f", &angle);
+    
+    /* Convert degrees to radians */
+    rad = angle * 3.14159 / 180.0;
+    
+    /* Calculate rotated coordinates */
+    rx1 = xr + (x1 - xr)*cos(rad) - (y1 - yr)*sin(rad);
+    ry1 = yr + (x1 - xr)*sin(rad) + (y1 - yr)*cos(rad);
+    
+    rx2 = xr + (x2 - xr)*cos(rad) - (y2 - yr)*sin(rad);
+    ry2 = yr + (x2 - xr)*sin(rad) + (y2 - yr)*cos(rad);
+    
+    rx3 = xr + (x3 - xr)*cos(rad) - (y3 - yr)*sin(rad);
+    ry3 = yr + (x3 - xr)*sin(rad) + (y3 - yr)*cos(rad);
+    
+    initgraph(&gd, &gm, "C:\\\\TURBOC3\\\\BGI");
+    
+    /* Draw Original Triangle in WHITE */
+    setcolor(WHITE);
+    line(x1, y1, x2, y2);
+    line(x2, y2, x3, y3);
+    line(x3, y3, x1, y1);
+    outtextxy(x2 + 5, y2, "Original");
+    
+    /* Draw Rotated Triangle in CYAN */
+    setcolor(CYAN);
+    line(rx1, ry1, rx2, ry2);
+    line(rx2, ry2, rx3, ry3);
+    line(rx3, ry3, rx1, ry1);
+    outtextxy(rx2 + 5, ry2, "Rotated");
+    
+    /* Highlight Pivot Point */
+    putpixel(xr, yr, RED);
+    outtextxy(xr - 10, yr + 10, "Pivot");
+    
+    getch();
+    closegraph();
+}`,
+    inputs: [
+      { id: "angle", label: "Rotation Angle (deg)", type: "range", min: 0, max: 360, val: 45 }
+    ],
+    draw: function(ctx, w, h, params) {
+      const angle = parseInt(params.angle);
+      const rad = (angle * Math.PI) / 180.0;
+      
+      const x1 = 300, y1 = 200;
+      const x2 = 400, y2 = 200;
+      const x3 = 350, y3 = 100;
+      const xr = 300, yr = 200; // pivot
+      
+      // Compute rotated coordinates
+      const rx1 = xr + (x1 - xr) * Math.cos(rad) - (y1 - yr) * Math.sin(rad);
+      const ry1 = yr + (x1 - xr) * Math.sin(rad) + (y1 - yr) * Math.cos(rad);
+      
+      const rx2 = xr + (x2 - xr) * Math.cos(rad) - (y2 - yr) * Math.sin(rad);
+      const ry2 = yr + (x2 - xr) * Math.sin(rad) + (y2 - yr) * Math.cos(rad);
+      
+      const rx3 = xr + (x3 - xr) * Math.cos(rad) - (y3 - yr) * Math.sin(rad);
+      const ry3 = yr + (x3 - xr) * Math.sin(rad) + (y3 - yr) * Math.cos(rad);
+      
+      // Draw original (dashed grey)
+      ctx.strokeStyle = "#555555";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.lineTo(x3, y3); ctx.closePath();
+      ctx.stroke();
+      ctx.fillStyle = "#888888";
+      ctx.fillText("Original", x2 + 5, y2);
+      
+      // Draw rotated (cyan)
+      ctx.strokeStyle = "#00f2fe";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(rx1, ry1); ctx.lineTo(rx2, ry2); ctx.lineTo(rx3, ry3); ctx.closePath();
+      ctx.stroke();
+      ctx.fillStyle = "#00f2fe";
+      ctx.fillText("Rotated", rx2 + 5, ry2);
+      
+      // Pivot indicator
+      ctx.fillStyle = "#ff0844";
+      ctx.beginPath();
+      ctx.arc(xr, yr, 4, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.fillText("Pivot (xr, yr)", xr - 30, yr + 15);
+    }
+  },
+  {
+    id: "scaling-2d",
+    title: "3. 2D Scaling of an Object",
+    fileName: "SCALE.C",
+    desc: "2D Scaling modifies the size of an object by multiplying coordinate offsets relative to a fixed point (xf, yf) by scaling factors sx and sy. Formulas: x' = xf + (x-xf)*sx, y' = yf + (y-yf)*sy.",
+    code: `/* 
+   2D Scaling of a Polygon about a Fixed Point 
+   Compatible with Turbo C++ / Turbo C 3.0 BGI
+*/
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+
+void main() {
+    int gd = DETECT, gm;
+    int x1 = 150, y1 = 150;
+    int x2 = 250, y2 = 150;
+    int x3 = 250, y3 = 250;
+    int x4 = 150, y4 = 250;
+    
+    /* Fixed Point of Scaling is (150, 150) */
+    int xf = 150, yf = 150;
+    float sx, sy;
+    int sx1, sy1, sx2, sy2, sx3, sy3, sx4, sy4;
+    
+    printf("Enter scaling factors sx and sy (float, e.g. 1.5 1.5): ");
+    scanf("%f %f", &sx, &sy);
+    
+    /* Calculate Scaled coordinates */
+    sx1 = xf + (x1 - xf) * sx;
+    sy1 = yf + (y1 - yf) * sy;
+    
+    sx2 = xf + (x2 - xf) * sx;
+    sy2 = yf + (y2 - yf) * sy;
+    
+    sx3 = xf + (x3 - xf) * sx;
+    sy3 = yf + (y3 - yf) * sy;
+    
+    sx4 = xf + (x4 - xf) * sx;
+    sy4 = yf + (y4 - yf) * sy;
+    
+    initgraph(&gd, &gm, "C:\\\\TURBOC3\\\\BGI");
+    
+    /* Draw Original square in WHITE */
+    setcolor(WHITE);
+    rectangle(x1, y1, x3, y3);
+    outtextxy(x1 + 10, y1 + 15, "Original");
+    
+    /* Draw Scaled shape in CYAN */
+    setcolor(CYAN);
+    line(sx1, sy1, sx2, sy2);
+    line(sx2, sy2, sx3, sy3);
+    line(sx3, sy3, sx4, sy4);
+    line(sx4, sy4, sx1, sy1);
+    outtextxy(sx1 + 10, sy1 + 35, "Scaled");
+    
+    /* Highlight Fixed point */
+    putpixel(xf, yf, RED);
+    outtextxy(xf - 10, yf - 10, "Fixed Point");
+    
+    getch();
+    closegraph();
+}`,
+    inputs: [
+      { id: "sx", label: "Scale Factor Sx", type: "range", min: 0.5, max: 2.0, step: 0.1, val: 1.5 },
+      { id: "sy", label: "Scale Factor Sy", type: "range", min: 0.5, max: 2.0, step: 0.1, val: 1.5 }
+    ],
+    draw: function(ctx, w, h, params) {
+      const sx = parseFloat(params.sx);
+      const sy = parseFloat(params.sy);
+      
+      const x1 = 150, y1 = 150;
+      const x2 = 250, y2 = 150;
+      const x3 = 250, y3 = 250;
+      const x4 = 150, y4 = 250;
+      const xf = 150, yf = 150; // Fixed Point
+      
+      // Calculate scaled coords
+      const sx1 = xf + (x1 - xf) * sx;
+      const sy1 = yf + (y1 - yf) * sy;
+      const sx2 = xf + (x2 - xf) * sx;
+      const sy2 = yf + (y2 - yf) * sy;
+      const sx3 = xf + (x3 - xf) * sx;
+      const sy3 = yf + (y3 - yf) * sy;
+      const sx4 = xf + (x4 - xf) * sx;
+      const sy4 = yf + (y4 - yf) * sy;
+      
+      // Draw original (dashed grey)
+      ctx.strokeStyle = "#555555";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.strokeRect(x1, y1, x3 - x1, y3 - y1);
+      ctx.fillStyle = "#888888";
+      ctx.fillText("Original", x1 + 10, y1 + 20);
+      
+      // Draw scaled (cyan)
+      ctx.strokeStyle = "#00f2fe";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(sx1, sy1); ctx.lineTo(sx2, sy2); ctx.lineTo(sx3, sy3); ctx.lineTo(sx4, sy4); ctx.closePath();
+      ctx.stroke();
+      ctx.fillStyle = "#00f2fe";
+      ctx.fillText("Scaled", sx1 + 10, sy1 + 35);
+      
+      // Fixed point indicator
+      ctx.fillStyle = "#ff0844";
+      ctx.beginPath();
+      ctx.arc(xf, yf, 4, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.fillText("Fixed Point", xf - 10, yf - 10);
+    }
+  },
+  {
+    id: "shear-reflection-2d",
+    title: "4. Shearing and Reflection on 2D Figure",
+    fileName: "SHEAR_REF.C",
+    desc: "Shearing distorts shape along an axis (X-shear: x'=x+shx*y, Y-shear: y'=y+shy*x). Reflection mirrors coordinates across an axis (Reflect X: x'=x, y'=-y; Reflect Y: x'=-x, y'=y).",
+    code: `/* 
+   2D Shearing & Reflection of a Rectangle 
+   Compatible with Turbo C++ / Turbo C 3.0 BGI
+*/
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+
+void main() {
+    int gd = DETECT, gm;
+    int x1 = 100, y1 = 100;
+    int x2 = 200, y2 = 100;
+    int x3 = 200, y3 = 200;
+    int x4 = 100, y4 = 200;
+    int choice;
+    float shx, shy;
+    
+    printf("1. X-Shear\\n2. Y-Shear\\n3. Reflection (about Y=240 screen axis)\\nEnter choice: ");
+    scanf("%d", &choice);
+    
+    initgraph(&gd, &gm, "C:\\\\TURBOC3\\\\BGI");
+    
+    /* Draw Original in WHITE */
+    setcolor(WHITE);
+    line(x1, y1, x2, y2);
+    line(x2, y2, x3, y3);
+    line(x3, y3, x4, y4);
+    line(x4, y4, x1, y1);
+    
+    setcolor(CYAN);
+    if(choice == 1) {
+        shx = 0.5; /* X-Shear factor */
+        line(x1 + shx*y1, y1, x2 + shx*y2, y2);
+        line(x2 + shx*y2, y2, x3 + shx*y3, y3);
+        line(x3 + shx*y3, y3, x4 + shx*y4, y4);
+        line(x4 + shx*y4, y4, x1 + shx*y1, y1);
+        outtextxy(200, 80, "X-Sheared");
+    } else if(choice == 2) {
+        shy = 0.5; /* Y-Shear factor */
+        line(x1, y1 + shy*x1, x2, y2 + shy*x2);
+        line(x2, y2 + shy*x2, x3, y3 + shy*x3);
+        line(x3, y3 + shy*x3, x4, y4 + shy*x4);
+        line(x4, y4 + shy*x4, x1, y1 + shy*x1);
+        outtextxy(250, 200, "Y-Sheared");
+    } else if(choice == 3) {
+        /* Reflect about horizontal mid-axis (y = 240) */
+        int axis_y = 240;
+        int ry1 = axis_y + (axis_y - y1);
+        int ry2 = axis_y + (axis_y - y2);
+        int ry3 = axis_y + (axis_y - y3);
+        int ry4 = axis_y + (axis_y - y4);
+        
+        line(x1, ry1, x2, ry2);
+        line(x2, ry2, x3, ry3);
+        line(x3, ry3, x4, ry4);
+        line(x4, ry4, x1, ry1);
+        
+        setcolor(RED);
+        line(0, axis_y, 640, axis_y); /* Mirror Line */
+        outtextxy(10, axis_y - 10, "Reflection Axis (Y=240)");
+        setcolor(CYAN);
+        outtextxy(x1, ry1 - 15, "Reflected");
+    }
+    
+    getch();
+    closegraph();
+}`,
+    inputs: [
+      { id: "mode", label: "Select Mode", type: "radio", options: [
+        { label: "X-Shearing", val: "xshear" },
+        { label: "Y-Shearing", val: "yshear" },
+        { label: "Reflection (Y-Axis)", val: "reflect" }
+      ], val: "xshear" },
+      { id: "factor", label: "Distortion Factor / Value", type: "range", min: -1.0, max: 1.0, step: 0.1, val: 0.5 }
+    ],
+    draw: function(ctx, w, h, params) {
+      const mode = params.mode;
+      const factor = parseFloat(params.factor);
+      
+      const x1 = 150, y1 = 100;
+      const x2 = 250, y2 = 100;
+      const x3 = 250, y3 = 200;
+      const x4 = 150, y4 = 200;
+      
+      // Draw original (dashed grey)
+      ctx.strokeStyle = "#555555";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.lineTo(x3, y3); ctx.lineTo(x4, y4); ctx.closePath();
+      ctx.stroke();
+      ctx.fillStyle = "#888888";
+      ctx.fillText("Original", x1 + 10, y1 + 20);
+      
+      ctx.strokeStyle = "#00f2fe";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([]);
+      ctx.fillStyle = "#00f2fe";
+      
+      if (mode === "xshear") {
+        // x' = x + shx * y (anchor to y1)
+        const sx1 = x1 + factor * (y1 - y1);
+        const sx2 = x2 + factor * (y2 - y1);
+        const sx3 = x3 + factor * (y3 - y1);
+        const sx4 = x4 + factor * (y4 - y1);
+        
+        ctx.beginPath();
+        ctx.moveTo(sx1, y1); ctx.lineTo(sx2, y2); ctx.lineTo(sx3, y3); ctx.lineTo(sx4, y4); ctx.closePath();
+        ctx.stroke();
+        ctx.fillText("X-Sheared", sx1 + 10, y1 + 35);
+      } else if (mode === "yshear") {
+        // y' = y + shy * x (anchor to x1)
+        const sy1 = y1 + factor * (x1 - x1);
+        const sy2 = y2 + factor * (x2 - x1);
+        const sy3 = y3 + factor * (x3 - x1);
+        const sy4 = y4 + factor * (x4 - x1);
+        
+        ctx.beginPath();
+        ctx.moveTo(x1, sy1); ctx.lineTo(x2, sy2); ctx.lineTo(x3, sy3); ctx.lineTo(x4, sy4); ctx.closePath();
+        ctx.stroke();
+        ctx.fillText("Y-Sheared", x1 + 10, sy1 + 35);
+      } else if (mode === "reflect") {
+        // Reflect about middle Y screen axis: axis_y = 240
+        const axis_y = 240;
+        const ry1 = axis_y + (axis_y - y1);
+        const ry2 = axis_y + (axis_y - y2);
+        const ry3 = axis_y + (axis_y - y3);
+        const ry4 = axis_y + (axis_y - y4);
+        
+        // Draw axis
+        ctx.strokeStyle = "#ff0844";
+        ctx.lineWidth = 1;
+        ctx.setLineDash([2, 2]);
+        ctx.beginPath();
+        ctx.moveTo(0, axis_y); ctx.lineTo(w, axis_y);
+        ctx.stroke();
+        ctx.fillStyle = "#ff0844";
+        ctx.fillText("Mirror Line (Y = 240)", 10, axis_y - 8);
+        
+        // Draw reflected shape
+        ctx.strokeStyle = "#00f2fe";
+        ctx.setLineDash([]);
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x1, ry1); ctx.lineTo(x2, ry2); ctx.lineTo(x3, ry3); ctx.lineTo(x4, ry4); ctx.closePath();
+        ctx.stroke();
+        ctx.fillStyle = "#00f2fe";
+        ctx.fillText("Reflected", x1 + 10, ry1 - 15);
+      }
+    }
+  },
+  {
+    id: "line-bresenham-c",
+    title: "5. Bresenham's Line Algorithm",
+    fileName: "BRES_LN.C",
+    desc: "Bresenham's Line Algorithm is an integer-only scan conversion method. It tracks an accumulator error (Pk) to decide between plotting E (x+1, y) or NE (x+1, y+1).",
+    code: `/* 
+   Bresenham's Line Drawing Algorithm (0 <= m <= 1)
+   Compatible with Turbo C++ / Turbo C 3.0 BGI
+*/
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+#include <math.h>
+
+void drawLineBresenham(int x0, int y0, int x1, int y1) {
+    int dx = abs(x1 - x0);
+    int dy = abs(y1 - y0);
+    int x = x0, y = y0;
+    
+    /* Initial Decision Parameter */
+    int p = 2 * dy - dx;
+    
+    while(x <= x1) {
+        putpixel(x, y, CYAN);
+        delay(10); /* Small delay to watch BGI plot */
+        x++;
+        if(p < 0) {
+            p = p + 2 * dy;
+        } else {
+            y++;
+            p = p + 2 * dy - 2 * dx;
+        }
+    }
+}
+
+void main() {
+    int gd = DETECT, gm;
+    int x0 = 100, y0 = 100, x1 = 400, y1 = 300;
+    
+    initgraph(&gd, &gm, "C:\\\\TURBOC3\\\\BGI");
+    
+    outtextxy(10, 10, "Bresenham Line (100,100) to (400,300)");
+    drawLineBresenham(x0, y0, x1, y1);
+    
+    getch();
+    closegraph();
+}`,
+    inputs: [
+      { id: "x0", label: "Start X0", type: "range", min: 50, max: 200, val: 100 },
+      { id: "y0", label: "Start Y0", type: "range", min: 50, max: 200, val: 100 },
+      { id: "x1", label: "End X1", type: "range", min: 250, max: 550, val: 400 },
+      { id: "y1", label: "End Y1", type: "range", min: 210, max: 400, val: 300 }
+    ],
+    draw: function(ctx, w, h, params) {
+      const x0 = parseInt(params.x0);
+      const y0 = parseInt(params.y0);
+      const x1 = parseInt(params.x1);
+      const y1 = parseInt(params.y1);
+      
+      const dx = Math.abs(x1 - x0);
+      const dy = Math.abs(y1 - y0);
+      const sx = x0 < x1 ? 1 : -1;
+      const sy = y0 < y1 ? 1 : -1;
+      
+      let x = x0;
+      let y = y0;
+      let p = 2 * dy - dx;
+      
+      ctx.fillStyle = "#a0aec0";
+      ctx.font = "10px JetBrains Mono";
+      ctx.fillText(`P0 = 2*${dy} - ${dx} = ${p}`, 20, 40);
+      
+      ctx.fillStyle = "#00f2fe";
+      
+      const isSlopeLessThanOne = dx >= dy;
+      if (isSlopeLessThanOne) {
+        while (x !== x1) {
+          ctx.fillRect(x - 1, y - 1, 3, 3);
+          x += sx;
+          if (p < 0) {
+            p += 2 * dy;
+          } else {
+            y += sy;
+            p += 2 * dy - 2 * dx;
+          }
+        }
+      } else {
+        let p_v = 2 * dx - dy;
+        while (y !== y1) {
+          ctx.fillRect(x - 1, y - 1, 3, 3);
+          y += sy;
+          if (p_v < 0) {
+            p_v += 2 * dx;
+          } else {
+            x += sx;
+            p_v += 2 * dx - 2 * dy;
+          }
+        }
+      }
+      ctx.fillRect(x1 - 1, y1 - 1, 3, 3);
+      
+      ctx.fillText(`Start (${x0}, ${y0})`, x0 - 20, y0 - 10);
+      ctx.fillText(`End (${x1}, ${y1})`, x1 - 20, y1 + 15);
+    }
+  },
+  {
+    id: "line-dda-c",
+    title: "6. DDA Line Drawing Algorithm",
+    fileName: "DDA_LINE.C",
+    desc: "Digital Differential Analyzer (DDA) is a floating-point algorithm. It calculates fractional increments x_inc = dx/steps and y_inc = dy/steps and adds them sequentially, using rounding at each step.",
+    code: `/* 
+   DDA Line Drawing Algorithm 
+   Compatible with Turbo C++ / Turbo C 3.0 BGI
+*/
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+#include <math.h>
+
+void drawLineDDA(int x0, int y0, int x1, int y1) {
+    int dx = x1 - x0;
+    int dy = y1 - y0;
+    int steps, i;
+    float xinc, yinc, x, y;
+    
+    steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
+    
+    xinc = (float)dx / steps;
+    yinc = (float)dy / steps;
+    
+    x = x0;
+    y = y0;
+    
+    for(i = 0; i <= steps; i++) {
+        /* Rounding coordinate and plot */
+        putpixel((int)(x + 0.5), (int)(y + 0.5), CYAN);
+        x = x + xinc;
+        y = y + yinc;
+    }
+}
+
+void main() {
+    int gd = DETECT, gm;
+    int x0 = 100, y0 = 100, x1 = 400, y1 = 300;
+    
+    initgraph(&gd, &gm, "C:\\\\TURBOC3\\\\BGI");
+    
+    outtextxy(10, 10, "DDA Line (100,100) to (400,300)");
+    drawLineDDA(x0, y0, x1, y1);
+    
+    getch();
+    closegraph();
+}`,
+    inputs: [
+      { id: "x0", label: "Start X0", type: "range", min: 50, max: 200, val: 100 },
+      { id: "y0", label: "Start Y0", type: "range", min: 50, max: 200, val: 100 },
+      { id: "x1", label: "End X1", type: "range", min: 250, max: 550, val: 400 },
+      { id: "y1", label: "End Y1", type: "range", min: 210, max: 400, val: 300 }
+    ],
+    draw: function(ctx, w, h, params) {
+      const x0 = parseInt(params.x0);
+      const y0 = parseInt(params.y0);
+      const x1 = parseInt(params.x1);
+      const y1 = parseInt(params.y1);
+      
+      const dx = x1 - x0;
+      const dy = y1 - y0;
+      const steps = Math.max(Math.abs(dx), Math.abs(dy));
+      
+      const xinc = dx / steps;
+      const yinc = dy / steps;
+      
+      let x = x0;
+      let y = y0;
+      
+      ctx.fillStyle = "#a0aec0";
+      ctx.font = "10px JetBrains Mono";
+      ctx.fillText(`Steps = max(|${dx}|, |${dy}|) = ${steps}`, 20, 40);
+      ctx.fillText(`dx/steps = ${xinc.toFixed(3)}, dy/steps = ${yinc.toFixed(3)}`, 20, 52);
+      
+      ctx.fillStyle = "#00f2fe";
+      for (let i = 0; i <= steps; i++) {
+        const px = Math.round(x);
+        const py = Math.round(y);
+        ctx.fillRect(px - 1, py - 1, 3, 3);
+        x += xinc;
+        y += yinc;
+      }
+      
+      ctx.fillText(`Start (${x0}, ${y0})`, x0 - 20, y0 - 10);
+      ctx.fillText(`End (${x1}, ${y1})`, x1 - 20, y1 + 15);
+    }
+  },
+  {
+    id: "circle-bresenham-c",
+    title: "7. Circle using Bresenham's Algorithm",
+    fileName: "BRES_CIR.C",
+    desc: "Bresenham's Midpoint Circle Drawing Algorithm. It calculates points for the first octant (0 to 45°) starting at (0, R) and mirrors them into the other 7 octants using 8-way symmetry.",
+    code: `/* 
+   Bresenham's (Midpoint) Circle Drawing Algorithm
+   Compatible with Turbo C++ / Turbo C 3.0 BGI
+*/
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+
+void draw8Symmetry(int xc, int yc, int x, int y) {
+    putpixel(xc + x, yc + y, CYAN);
+    putpixel(xc - x, yc + y, CYAN);
+    putpixel(xc + x, yc - y, CYAN);
+    putpixel(xc - x, yc - y, CYAN);
+    putpixel(xc + y, yc + x, CYAN);
+    putpixel(xc - y, yc + x, CYAN);
+    putpixel(xc + y, yc - x, CYAN);
+    putpixel(xc - y, yc - x, CYAN);
+}
+
+void drawCircleBresenham(int xc, int yc, int r) {
+    int x = 0;
+    int y = r;
+    int p = 1 - r; /* Initial Decision Parameter */
+    
+    draw8Symmetry(xc, yc, x, y);
+    
+    while(x < y) {
+        x++;
+        if(p < 0) {
+            p = p + 2 * x + 1;
+        } else {
+            y--;
+            p = p + 2 * (x - y) + 1;
+        }
+        draw8Symmetry(xc, yc, x, y);
+        delay(15); /* Watch BGI draw symmetry */
+    }
+}
+
+void main() {
+    int gd = DETECT, gm;
+    int xc = 320, yc = 240, r = 120;
+    
+    initgraph(&gd, &gm, "C:\\\\TURBOC3\\\\BGI");
+    
+    outtextxy(10, 10, "Bresenham Circle: Center (320, 240), R=120");
+    drawCircleBresenham(xc, yc, r);
+    
+    getch();
+    closegraph();
+}`,
+    inputs: [
+      { id: "r", label: "Circle Radius R", type: "range", min: 30, max: 200, val: 120 }
+    ],
+    draw: function(ctx, w, h, params) {
+      const r = parseInt(params.r);
+      const xc = 320, yc = 240;
+      
+      let x = 0;
+      let y = r;
+      let p = 1 - r;
+      
+      function plotSymmetric(cx, cy, px, py) {
+        ctx.fillRect(cx + px - 1, cy + py - 1, 3, 3);
+        ctx.fillRect(cx - px - 1, cy + py - 1, 3, 3);
+        ctx.fillRect(cx + px - 1, cy - py - 1, 3, 3);
+        ctx.fillRect(cx - px - 1, cy - py - 1, 3, 3);
+        ctx.fillRect(cx + py - 1, cy + px - 1, 3, 3);
+        ctx.fillRect(cx - py - 1, cy + px - 1, 3, 3);
+        ctx.fillRect(cx + py - 1, cy - px - 1, 3, 3);
+        ctx.fillRect(cx - py - 1, cy - px - 1, 3, 3);
+      }
+      
+      ctx.fillStyle = "#00f2fe";
+      plotSymmetric(xc, yc, x, y);
+      
+      while (x < y) {
+        x++;
+        if (p < 0) {
+          p += 2 * x + 1;
+        } else {
+          y--;
+          p += 2 * (x - y) + 1;
+        }
+        plotSymmetric(xc, yc, x, y);
+      }
+      
+      // Center indicator
+      ctx.fillStyle = "#ff0844";
+      ctx.beginPath(); ctx.arc(xc, yc, 3, 0, 2*Math.PI); ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "10px JetBrains Mono";
+      ctx.fillText(`Center (320, 240)`, xc - 40, yc + 15);
+      ctx.fillText(`R = ${r}`, xc + r - 30, yc - 10);
+    }
+  },
+  {
+    id: "ellipse-midpoint-c",
+    title: "8. Ellipse Drawing using Midpoint Algorithm",
+    fileName: "ELLIPSE.C",
+    desc: "Midpoint Ellipse Algorithm. Divides drawing into Region 1 (slope > -1) and Region 2 (slope <= -1) split at tangent dy/dx = -1. Draws in Quadrant 1 and mirrors to the other three (4-way symmetry).",
+    code: `/* 
+   Midpoint Ellipse Drawing Algorithm 
+   Compatible with Turbo C++ / Turbo C 3.0 BGI
+*/
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+
+void draw4Symmetry(int xc, int yc, int x, int y) {
+    putpixel(xc + x, yc + y, CYAN);
+    putpixel(xc - x, yc + y, CYAN);
+    putpixel(xc + x, yc - y, CYAN);
+    putpixel(xc - x, yc - y, CYAN);
+}
+
+void drawEllipseMidpoint(int xc, int yc, int rx, int ry) {
+    float x = 0;
+    float y = ry;
+    
+    /* Region 1 decision parameter */
+    float p1 = ry*ry - rx*rx*ry + 0.25*rx*rx;
+    float dx = 2 * ry * ry * x;
+    float dy = 2 * rx * rx * y;
+    
+    draw4Symmetry(xc, yc, x, y);
+    
+    /* Region 1: Slope > -1 */
+    while(dx < dy) {
+        x++;
+        dx = dx + 2 * ry * ry;
+        if(p1 < 0) {
+            p1 = p1 + dx + ry * ry;
+        } else {
+            y--;
+            dy = dy - 2 * rx * rx;
+            p1 = p1 + dx - dy + ry * ry;
+        }
+        draw4Symmetry(xc, yc, x, y);
+    }
+    
+    /* Region 2 decision parameter */
+    float p2 = ry*ry*(x+0.5)*(x+0.5) + rx*rx*(y-1)*(y-1) - rx*rx*ry*ry;
+    
+    /* Region 2: Slope <= -1 */
+    while(y > 0) {
+        y--;
+        dy = dy - 2 * rx * rx;
+        if(p2 > 0) {
+            p2 = p2 + rx * rx - dy;
+        } else {
+            x++;
+            dx = dx + 2 * ry * ry;
+            p2 = p2 + rx * rx + dx - dy;
+        }
+        draw4Symmetry(xc, yc, x, y);
+    }
+}
+
+void main() {
+    int gd = DETECT, gm;
+    int xc = 320, yc = 240, rx = 150, ry = 90;
+    
+    initgraph(&gd, &gm, "C:\\\\TURBOC3\\\\BGI");
+    
+    outtextxy(10, 10, "Midpoint Ellipse: rx=150, ry=90");
+    drawEllipseMidpoint(xc, yc, rx, ry);
+    
+    getch();
+    closegraph();
+}`,
+    inputs: [
+      { id: "rx", label: "Horizontal Rx", type: "range", min: 40, max: 250, val: 150 },
+      { id: "ry", label: "Vertical Ry", type: "range", min: 30, max: 200, val: 90 }
+    ],
+    draw: function(ctx, w, h, params) {
+      const rx = parseInt(params.rx);
+      const ry = parseInt(params.ry);
+      const xc = 320, yc = 240;
+      
+      let x = 0;
+      let y = ry;
+      
+      function plot4Symmetry(cx, cy, px, py) {
+        ctx.fillRect(cx + px - 1, cy + py - 1, 3, 3);
+        ctx.fillRect(cx - px - 1, cy + py - 1, 3, 3);
+        ctx.fillRect(cx + px - 1, cy - py - 1, 3, 3);
+        ctx.fillRect(cx - px - 1, cy - py - 1, 3, 3);
+      }
+      
+      ctx.fillStyle = "#00f2fe";
+      
+      // Region 1
+      let p1 = ry * ry - rx * rx * ry + 0.25 * rx * rx;
+      let dx = 2 * ry * ry * x;
+      let dy = 2 * rx * rx * y;
+      
+      plot4Symmetry(xc, yc, x, y);
+      
+      while (dx < dy) {
+        x++;
+        dx += 2 * ry * ry;
+        if (p1 < 0) {
+          p1 += dx + ry * ry;
+        } else {
+          y--;
+          dy -= 2 * rx * rx;
+          p1 += dx - dy + ry * ry;
+        }
+        plot4Symmetry(xc, yc, x, y);
+      }
+      
+      // Region 2
+      let p2 = ry * ry * (x + 0.5) * (x + 0.5) + rx * rx * (y - 1) * (y - 1) - rx * rx * ry * ry;
+      while (y > 0) {
+        y--;
+        dy -= 2 * rx * rx;
+        if (p2 > 0) {
+          p2 += rx * rx - dy;
+        } else {
+          x++;
+          dx += 2 * ry * ry;
+          p2 += rx * rx + dx - dy;
+        }
+        plot4Symmetry(xc, yc, x, y);
+      }
+      
+      ctx.fillStyle = "#ff0844";
+      ctx.beginPath(); ctx.arc(xc, yc, 3, 0, 2*Math.PI); ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "10px JetBrains Mono";
+      ctx.fillText(`Center (320, 240)`, xc - 40, yc + 15);
+      ctx.fillText(`Rx = ${rx}, Ry = ${ry}`, xc + rx - 50, yc - 15);
+    }
+  },
+  {
+    id: "scanline-fill-c",
+    title: "9. Polygon Filling using Scan-line Algorithm",
+    fileName: "SCANLINE.C",
+    desc: "Scan-line Polygon Fill intersects each horizontal scanline with the polygon edges. It sorts these intersections left-to-right (Odd-Even logic) and draws fill lines between alternate pairs.",
+    code: `/* 
+   Scan-Line Polygon Filling Algorithm 
+   Compatible with Turbo C++ / Turbo C 3.0 BGI
+*/
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+
+void main() {
+    int gd = DETECT, gm;
+    
+    /* Vertices of the polygon */
+    int x[] = {150, 400, 480, 200};
+    int y[] = {150, 100, 350, 300};
+    int n = 4; /* Number of vertices */
+    
+    int i, j, k, temp, ymin, ymax, scan_y;
+    int inter_x[20], count;
+    float slope;
+    
+    initgraph(&gd, &gm, "C:\\\\TURBOC3\\\\BGI");
+    
+    /* Draw outline of polygon in WHITE */
+    setcolor(WHITE);
+    for(i = 0; i < n; i++) {
+        line(x[i], y[i], x[(i+1)%n], y[(i+1)%n]);
+    }
+    
+    /* Find Y min and Y max */
+    ymin = y[0]; ymax = y[0];
+    for(i = 1; i < n; i++) {
+        if(y[i] < ymin) ymin = y[i];
+        if(y[i] > ymax) ymax = y[i];
+    }
+    
+    /* Loop for every Scanline from ymin to ymax */
+    for(scan_y = ymin; scan_y <= ymax; scan_y++) {
+        count = 0;
+        
+        /* Find edge intersections with scan_y */
+        for(i = 0; i < n; i++) {
+            j = (i + 1) % n;
+            
+            /* Check if scan_y falls between edge endpoints */
+            if((y[i] < scan_y && y[j] >= scan_y) || (y[j] < scan_y && y[i] >= scan_y)) {
+                /* Calculate X intersection */
+                inter_x[count] = x[i] + (float)(scan_y - y[i]) / (y[j] - y[i]) * (x[j] - x[i]);
+                count++;
+            }
+        }
+        
+        /* Sort intersections in ascending order (Bubble Sort) */
+        for(i = 0; i < count - 1; i++) {
+            for(j = 0; j < count - i - 1; j++) {
+                if(inter_x[j] > inter_x[j+1]) {
+                    temp = inter_x[j];
+                    inter_x[j] = inter_x[j+1];
+                    inter_x[j+1] = temp;
+                }
+            }
+        }
+        
+        /* Fill between pairs of intersections in CYAN */
+        setcolor(CYAN);
+        for(i = 0; i < count; i += 2) {
+            line(inter_x[i], scan_y, inter_x[i+1], scan_y);
+        }
+        delay(5); /* Watch the polygon fill top-to-bottom */
+    }
+    
+    getch();
+    closegraph();
+}`,
+    inputs: [
+      { id: "scanY", label: "Animate Scan-Line Y", type: "range", min: 100, max: 350, val: 240 }
+    ],
+    draw: function(ctx, w, h, params) {
+      const currentScanY = parseInt(params.scanY);
+      
+      const x = [150, 400, 480, 200];
+      const y = [150, 100, 350, 300];
+      const n = 4;
+      
+      // Draw scanline cursor
+      ctx.strokeStyle = "#ff0844";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 4]);
+      ctx.beginPath();
+      ctx.moveTo(0, currentScanY); ctx.lineTo(w, currentScanY);
+      ctx.stroke();
+      ctx.fillStyle = "#ff0844";
+      ctx.font = "10px JetBrains Mono";
+      ctx.fillText(`Current Scan Y = ${currentScanY}`, 10, currentScanY - 5);
+      
+      // Calculate ymin and ymax
+      let ymin = y[0], ymax = y[0];
+      for (let i = 1; i < n; i++) {
+        if (y[i] < ymin) ymin = y[i];
+        if (y[i] > ymax) ymax = y[i];
+      }
+      
+      // Perform Scan-line fill up to currentScanY
+      ctx.strokeStyle = "rgba(0, 242, 254, 0.6)";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([]);
+      
+      for (let sy = ymin; sy <= currentScanY; sy++) {
+        let interX = [];
+        for (let i = 0; i < n; i++) {
+          const next = (i + 1) % n;
+          if ((y[i] < sy && y[next] >= sy) || (y[next] < sy && y[i] >= sy)) {
+            const ix = x[i] + (sy - y[i]) / (y[next] - y[i]) * (x[next] - x[i]);
+            interX.push(ix);
+          }
+        }
+        interX.sort((a, b) => a - b);
+        for (let i = 0; i < interX.length; i += 2) {
+          ctx.beginPath();
+          ctx.moveTo(interX[i], sy);
+          ctx.lineTo(interX[i+1], sy);
+          ctx.stroke();
+        }
+      }
+      
+      // Draw polygon outline (white)
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(x[0], y[0]);
+      for (let i = 1; i < n; i++) {
+        ctx.lineTo(x[i], y[i]);
+      }
+      ctx.closePath();
+      ctx.stroke();
+      
+      // Draw vertices dots
+      ctx.fillStyle = "#ffb300";
+      for (let i = 0; i < n; i++) {
+        ctx.beginPath(); ctx.arc(x[i], y[i], 3, 0, 2*Math.PI); ctx.fill();
+      }
+    }
+  }
+];
+
+function initCPrograms() {
+  const cprogListNav = document.getElementById('cprograms-list-nav');
+  const titleEl = document.getElementById('cprogram-title');
+  const descEl = document.getElementById('cprogram-desc');
+  const codeBox = document.getElementById('cprogram-code-box');
+  const fileNameEl = document.getElementById('editor-file-name');
+  
+  const subTabButtons = document.querySelectorAll('.sub-tab-btn');
+  const subTabContents = document.querySelectorAll('.sub-tab-content');
+  const paramsForm = document.getElementById('cprograms-params-form');
+  const copyBtn = document.getElementById('btn-copy-code');
+  
+  let activeProgIdx = 0;
+  
+  // Render Sidebar program items
+  cprogListNav.innerHTML = '';
+  cprogramsData.forEach((prog, index) => {
+    const li = document.createElement('li');
+    const button = document.createElement('button');
+    button.className = `cprogram-nav-item ${index === 0 ? 'active' : ''}`;
+    button.innerHTML = `<span class="prog-num">${index + 1}.</span> ${prog.title.substring(3)}`;
+    button.addEventListener('click', () => {
+      loadProgram(index);
+    });
+    li.appendChild(button);
+    cprogListNav.appendChild(li);
+  });
+  
+  // Copy to clipboard listener
+  copyBtn.addEventListener('click', () => {
+    const codeText = cprogramsData[activeProgIdx].code;
+    navigator.clipboard.writeText(codeText).then(() => {
+      const origText = copyBtn.innerHTML;
+      copyBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--success-color)"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+        Copied!
+      `;
+      copyBtn.classList.add('btn-success');
+      setTimeout(() => {
+        copyBtn.innerHTML = origText;
+        copyBtn.classList.remove('btn-success');
+      }, 1500);
+    });
+  });
+  
+  // Sub-tab togglers (Source Code vs Simulated graphics)
+  subTabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const subtab = btn.getAttribute('data-subtab');
+      
+      subTabButtons.forEach(b => b.classList.remove('active'));
+      subTabContents.forEach(c => c.classList.remove('active'));
+      
+      btn.classList.add('active');
+      document.getElementById(`subtab-${subtab}`).classList.add('active');
+      
+      if (subtab === 'tcrun') {
+        drawSimulatedCanvas();
+      }
+    });
+  });
+  
+  // Load specified program index
+  function loadProgram(index) {
+    activeProgIdx = index;
+    
+    const prog = cprogramsData[index];
+    titleEl.textContent = prog.title;
+    descEl.textContent = prog.desc;
+    fileNameEl.textContent = prog.fileName;
+    codeBox.textContent = prog.code;
+    
+    // Update active nav item
+    const navItems = document.querySelectorAll('.cprogram-nav-item');
+    navItems.forEach((btn, idx) => {
+      if (idx === index) {
+        btn.classList.add('active');
+        btn.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    
+    // Populate parameters controls panel
+    buildParamsPanel(prog);
+    
+    // Switch to code tab by default
+    subTabButtons[0].click();
+  }
+  
+  // Build interactive controls inside parameters sidebar
+  function buildParamsPanel(prog) {
+    paramsForm.innerHTML = '';
+    
+    prog.inputs.forEach(inp => {
+      if (inp.type === 'range') {
+        const div = document.createElement('div');
+        div.className = 'param-slider-group';
+        div.innerHTML = `
+          <label>
+            <span>${inp.label}</span>
+            <span class="param-val" id="val-${inp.id}">${inp.val}</span>
+          </label>
+          <input type="range" id="input-${inp.id}" min="${inp.min}" max="${inp.max}" step="${inp.step || 1}" value="${inp.val}">
+        `;
+        paramsForm.appendChild(div);
+        
+        const slider = div.querySelector('input');
+        slider.addEventListener('input', (e) => {
+          document.getElementById(`val-${inp.id}`).textContent = e.target.value;
+          drawSimulatedCanvas();
+        });
+      } else if (inp.type === 'radio') {
+        const title = document.createElement('div');
+        title.className = 'param-title-label';
+        title.textContent = inp.label;
+        paramsForm.appendChild(title);
+        
+        const div = document.createElement('div');
+        div.className = 'param-radio-group';
+        
+        inp.options.forEach((opt, oi) => {
+          const label = document.createElement('label');
+          label.className = 'param-radio-label';
+          label.innerHTML = `
+            <input type="radio" name="param-${inp.id}" value="${opt.val}" ${opt.val === inp.val ? 'checked' : ''}>
+            ${opt.label}
+          `;
+          div.appendChild(label);
+          
+          const radio = label.querySelector('input');
+          radio.addEventListener('change', () => {
+            drawSimulatedCanvas();
+          });
+        });
+        paramsForm.appendChild(div);
+      }
+    });
+    
+    // Add C Program context note
+    const note = document.createElement('div');
+    note.className = 'cprogram-param-note';
+    note.innerHTML = `
+      <strong>Turbo C++ Output Guide:</strong> Adjust the sliders above. The canvas on the <strong>Simulated Graphics Output</strong> sub-tab will redraw to simulate running your C code under those exact input parameters.
+    `;
+    paramsForm.appendChild(note);
+  }
+  
+  // Render shape on BGI Canvas
+  function drawSimulatedCanvas() {
+    const canvas = document.getElementById('tc-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+    
+    // Clear screen (black background)
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, w, h);
+    
+    // Draw outer green/blue grid lines very faintly to look like an old CRT monitor
+    ctx.strokeStyle = "rgba(0, 85, 170, 0.1)";
+    ctx.lineWidth = 1;
+    for (let c = 40; c < w; c += 40) {
+      ctx.beginPath(); ctx.moveTo(c, 0); ctx.lineTo(c, h); ctx.stroke();
+    }
+    for (let r = 40; r < h; r += 40) {
+      ctx.beginPath(); ctx.moveTo(0, r); ctx.lineTo(w, r); ctx.stroke();
+    }
+    
+    // Read input parameters dynamically
+    const params = {};
+    const prog = cprogramsData[activeProgIdx];
+    prog.inputs.forEach(inp => {
+      if (inp.type === 'range') {
+        const inputEl = document.getElementById(`input-${inp.id}`);
+        params[inp.id] = inputEl ? inputEl.value : inp.val;
+      } else if (inp.type === 'radio') {
+        const checkedEl = document.querySelector(`input[name="param-${inp.id}"]:checked`);
+        params[inp.id] = checkedEl ? checkedEl.value : inp.val;
+      }
+    });
+    
+    // Execute drawing routine
+    ctx.save();
+    prog.draw(ctx, w, h, params);
+    ctx.restore();
+  }
+  
+  // Load initial program
+  loadProgram(0);
+  
+  // Expose function globally so tab resizing or activations can trigger redraw
+  window.redrawTCCanvas = drawSimulatedCanvas;
+}
+
+// ==========================================
 // MAIN INITIALIZATION ON DOM LOADED
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -1904,4 +3160,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initSlideshow();
   initFlashcards();
   initVisualizer();
+  initCPrograms();
 });

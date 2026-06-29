@@ -33,6 +33,10 @@
         <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
         Algorithm Visualizers
       </button>
+      <button class="nav-btn" data-tab="cprograms" id="nav-cprograms">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+        C Lab Programs
+      </button>
     </nav>
 
     <div class="exam-countdown" id="countdown-timer">
@@ -334,6 +338,71 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- 4. C PROGRAMS SECTION -->
+    <section id="cprograms-section" class="tab-content">
+      <div class="cprograms-layout">
+        <!-- Sidebar list of programs -->
+        <aside class="cprograms-sidebar">
+          <h3>C Lab Manual</h3>
+          <ul class="cprograms-list" id="cprograms-list-nav">
+            <!-- Dynamically populated via JS -->
+          </ul>
+        </aside>
+
+        <!-- Main Editor and Simulator view -->
+        <div class="cprograms-main">
+          <div class="cprogram-header">
+            <h2 id="cprogram-title">Program Title</h2>
+            <p id="cprogram-desc">Description of the program.</p>
+          </div>
+
+          <div class="cprogram-tabs-control">
+            <button class="sub-tab-btn active" data-subtab="ccode">Source Code (Turbo C++)</button>
+            <button class="sub-tab-btn" data-subtab="tcrun">Simulated Graphics Output</button>
+          </div>
+
+          <!-- Sub-tab content area -->
+          <div class="cprogram-content-wrapper">
+            <!-- Code display -->
+            <div id="subtab-ccode" class="sub-tab-content active">
+              <div class="code-editor-header">
+                <span class="editor-file-title" id="editor-file-name">TC_GRAPH.C</span>
+                <button class="btn btn-secondary btn-sm" id="btn-copy-code">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                  Copy Code
+                </button>
+              </div>
+              <pre class="code-view-pre"><code id="cprogram-code-box">Loading code...</code></pre>
+            </div>
+
+            <!-- Graphics window simulator -->
+            <div id="subtab-tcrun" class="sub-tab-content">
+              <div class="tc-monitor-wrapper">
+                <div class="tc-monitor-bezel">
+                  <div class="tc-monitor-screen">
+                    <div class="tc-status-bar">
+                      <span class="tc-status-left">Turbo C++ Emulator Window</span>
+                      <span class="tc-status-right">640 &times; 480 (BGI Mode)</span>
+                    </div>
+                    <!-- Canvas where shapes will be drawn -->
+                    <canvas id="tc-canvas" width="640" height="480"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side Parameters Panel -->
+        <aside class="cprograms-params-panel">
+          <h3>Interactive Parameters</h3>
+          <div id="cprograms-params-form">
+            <!-- Dynamic inputs based on active program -->
+          </div>
+        </aside>
       </div>
     </section>
 
