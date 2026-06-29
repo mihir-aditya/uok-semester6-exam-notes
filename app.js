@@ -824,7 +824,8 @@ function initFlashcards() {
   const resetBtn = document.getElementById('reset-cards-btn');
   
   // Load card states from local storage if exists
-  const storedStates = localStorage.getItem('cg_flashcard_states');
+  const storageKey = activeSubject === 'cg' ? 'cg_flashcard_states' : 'cs_flashcard_states';
+  const storedStates = localStorage.getItem(storageKey);
   if (storedStates) {
     cardStates = JSON.parse(storedStates);
   } else {
@@ -834,14 +835,16 @@ function initFlashcards() {
   totalCountEl.textContent = flashcardsData.length;
   
   // Flip handler
-  flashcardWrapper.addEventListener('click', () => {
-    flashcard.classList.toggle('flipped');
-    // Enable state buttons once flipped
-    if (flashcard.classList.contains('flipped')) {
-      masterBtn.disabled = false;
-      reviewBtn.disabled = false;
-    }
-  });
+  if (!window.flashcardsListenersAttached) {
+    flashcardWrapper.addEventListener('click', () => {
+      flashcard.classList.toggle('flipped');
+      // Enable state buttons once flipped
+      if (flashcard.classList.contains('flipped')) {
+        masterBtn.disabled = false;
+        reviewBtn.disabled = false;
+      }
+    });
+  }
   
   function updateUI() {
     // Reset flip status
@@ -850,11 +853,16 @@ function initFlashcards() {
     reviewBtn.disabled = true;
     
     // Load content
+    if (activeCardIdx >= flashcardsData.length) {
+      activeCardIdx = 0;
+    }
     const cardData = flashcardsData[activeCardIdx];
-    catFront.textContent = cardData.category;
-    catBack.textContent = `${cardData.category} - Answer`;
-    questionEl.innerHTML = cardData.question;
-    answerEl.innerHTML = cardData.answer;
+    if (cardData) {
+      catFront.textContent = cardData.category;
+      catBack.textContent = `${cardData.category} - Answer`;
+      questionEl.innerHTML = cardData.question;
+      answerEl.innerHTML = cardData.answer;
+    }
     
     // Indicators
     indicator.textContent = `Card ${activeCardIdx + 1} of ${flashcardsData.length}`;
@@ -871,7 +879,6 @@ function initFlashcards() {
     pctText.textContent = `${pct}%`;
     
     // Radial SVG stroke dashoffset
-    // Radius = 50, Circumference = 2 * PI * 50 = 314.15
     const circ = 2 * Math.PI * 50;
     radialProgress.style.strokeDasharray = `${circ} ${circ}`;
     const offset = circ - (pct / 100) * circ;
@@ -890,57 +897,61 @@ function initFlashcards() {
       flashcard.style.borderColor = 'var(--border-color)';
     }
     
-    localStorage.setItem('cg_flashcard_states', JSON.stringify(cardStates));
+    localStorage.setItem(storageKey, JSON.stringify(cardStates));
   }
   
-  // Navigation
-  prevBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (activeCardIdx > 0) {
-      activeCardIdx--;
-      updateUI();
-    }
-  });
-  
-  nextBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (activeCardIdx < flashcardsData.length - 1) {
-      activeCardIdx++;
-      updateUI();
-    }
-  });
-  
-  // Marking Handlers
-  masterBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    cardStates[activeCardIdx] = 'mastered';
-    updateUI();
-    // Auto advance after short delay
-    setTimeout(() => {
+  if (!window.flashcardsListenersAttached) {
+    // Navigation
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (activeCardIdx > 0) {
+        activeCardIdx--;
+        updateUI();
+      }
+    });
+    
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       if (activeCardIdx < flashcardsData.length - 1) {
         activeCardIdx++;
         updateUI();
       }
-    }, 400);
-  });
-  
-  reviewBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    cardStates[activeCardIdx] = 'review';
-    updateUI();
-    setTimeout(() => {
-      if (activeCardIdx < flashcardsData.length - 1) {
-        activeCardIdx++;
-        updateUI();
-      }
-    }, 400);
-  });
-  
-  resetBtn.addEventListener('click', () => {
-    cardStates = flashcardsData.map(() => 'unstudied');
-    activeCardIdx = 0;
-    updateUI();
-  });
+    });
+    
+    // Marking Handlers
+    masterBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cardStates[activeCardIdx] = 'mastered';
+      updateUI();
+      // Auto advance after short delay
+      setTimeout(() => {
+        if (activeCardIdx < flashcardsData.length - 1) {
+          activeCardIdx++;
+          updateUI();
+        }
+      }, 400);
+    });
+    
+    reviewBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cardStates[activeCardIdx] = 'review';
+      updateUI();
+      setTimeout(() => {
+        if (activeCardIdx < flashcardsData.length - 1) {
+          activeCardIdx++;
+          updateUI();
+        }
+      }, 400);
+    });
+    
+    resetBtn.addEventListener('click', () => {
+      cardStates = flashcardsData.map(() => 'unstudied');
+      activeCardIdx = 0;
+      updateUI();
+    });
+    
+    window.flashcardsListenersAttached = true;
+  }
   
   updateUI();
 }
@@ -3879,7 +3890,7 @@ function initSubjectSwitcher() {
     initSlideshow();
     
     // Refresh flashcards progress and index
-    localStorage.removeItem('cg_flashcard_states'); // Clear caching across subject toggle
+    activeCardIdx = 0;
     initFlashcards();
     
     // Trigger resize for layout rendering yokes
