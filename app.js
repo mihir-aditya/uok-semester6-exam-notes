@@ -3893,9 +3893,424 @@ function initSubjectSwitcher() {
     activeCardIdx = 0;
     initFlashcards();
     
+    // Refresh study guide contents
+    if (window.refreshStudyGuide) {
+      window.refreshStudyGuide();
+    }
+    
     // Trigger resize for layout rendering yokes
     window.dispatchEvent(new Event('resize'));
   });
+}
+
+const studyGuideDataCG = [
+  {
+    title: "1. Intro & Basic Elements",
+    content: `
+      <h2>Computer Graphics Basic Elements</h2>
+      <p>Computer Graphics is the technology of creating, manipulating, and displaying digital pictorial data. At its core, the system relies on physical display components and mathematical representations.</p>
+      
+      <div class="info-callout">
+        <h4>Core Concepts for the Exam:</h4>
+        <ul class="slide-bullet-list">
+          <li><strong>Pixel (Picture Element):</strong> The fundamental atomic unit of a digital image. A point light source represented by coordinates on a 2D matrix.</li>
+          <li><strong>Resolution:</strong> The density of pixels on the display screen. Expressed as horizontal &times; vertical counts (e.g. 1920 &times; 1080). Higher density reduces the size of individual pixels, yielding greater detail.</li>
+          <li><strong>Aspect Ratio:</strong> The physical proportion of screen width to height (e.g. 4:3 or 16:9). To draw shapes correctly without skewing, the software must compensate for non-square pixel dimensions.</li>
+          <li><strong>Frame Buffer:</strong> A specialized block of VRAM that holds the intensity or color bits for every single pixel on the screen. The video controller constantly reads this memory to refresh the display.</li>
+        </ul>
+      </div>
+
+      <div class="math-box">
+        <p><strong>Exhaustive Frame Buffer Size Calculations:</strong></p>
+        To compute the frame buffer size in bytes:
+        <br><code>Size = Width &times; Height &times; (Bit Depth) / 8</code>
+        <br><br><strong>Example 1:</strong> Resolution 1280 &times; 1024 with 8-bit color depth (256 colors):
+        <br><code>Size = 1280 &times; 1024 &times; 8 / 8 = 1,310,720 Bytes = 1.25 MB</code>
+        <br><br><strong>Example 2:</strong> Resolution 1920 &times; 1080 with 24-bit True Color depth:
+        <br><code>Size = 1920 &times; 1080 &times; 24 / 8 = 6,220,800 Bytes = 5.93 MB</code>
+      </div>
+    `
+  },
+  {
+    title: "2. Display Architectures",
+    content: `
+      <h2>Raster Scan vs. Random Scan Displays</h2>
+      <p>Display architectures define how the cathode ray tube's electron gun plots images on screen phosphors.</p>
+      
+      <div class="table-container">
+        <table class="trace-table" style="font-size:0.85rem; width:100%;">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Raster Scan Display</th>
+              <th>Random Scan Display (Vector)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Beam Sweep</strong></td>
+              <td>Row-by-row systematically across the entire screen from top-left to bottom-right.</td>
+              <td>Directly along the coordinates of lines. Shuts off (blanks) when jumping between shapes.</td>
+            </tr>
+            <tr>
+              <td><strong>Memory Buffer</strong></td>
+              <td>Frame Buffer holds color bits for every pixel location.</td>
+              <td>Display Buffer (Display File) holds line commands (MOVE, LINE, DRAW).</td>
+            </tr>
+            <tr>
+              <td><strong>Lines Quality</strong></td>
+              <td>Jagged staircase lines (aliasing) due to pixel grid snapping.</td>
+              <td>Perfectly smooth lines with no pixelation/aliasing.</td>
+            </tr>
+            <tr>
+              <td><strong>Refresh Speed</strong></td>
+              <td>Constant refresh rate (e.g. 60Hz) regardless of picture complexity.</td>
+              <td>Dynamic refresh rate; too many vector lines cause flicker.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-callout" style="margin-top: 1rem;">
+        <h4>CRT Components & Functions:</h4>
+        <ul class="slide-bullet-list">
+          <li><strong>Cathode:</strong> Heated filament emitting electrons via thermionic emission.</li>
+          <li><strong>Control Grid:</strong> Negatively biased aperture cup that regulates beam electron density (brightness control).</li>
+          <li><strong>Focusing & Accelerating Anodes:</strong> Focusing anode converges electrons into a tight spot; accelerating anode speeds them up to hit the screen phosphors with high kinetic energy.</li>
+          <li><strong>Deflection Yoke:</strong> Vertical/Horizontal magnetic coils that bend the beam path.</li>
+        </ul>
+      </div>
+    `
+  },
+  {
+    title: "3. Line Algorithm Derivations",
+    content: `
+      <h2>DDA and Bresenham Line Algorithms</h2>
+      <p>Scan-converting a line requires translating mathematical endpoints $(x_0, y_0)$ and $(x_1, y_1)$ into coordinate grids.</p>
+      
+      <h3>1. Digital Differential Analyzer (DDA) Derivation:</h3>
+      <p>DDA uses floating-point additions. Slope $m = \Delta y / \Delta x$.</p>
+      <ul>
+        <li>If $|m| \le 1$ (horizontal trend): Increment $x_k$ by 1. $y_{k+1} = y_k + m$.</li>
+        <li>If $|m| > 1$ (vertical trend): Increment $y_k$ by 1. $x_{k+1} = x_k + 1/m$.</li>
+      </ul>
+      <p>Each step computes decimals requiring slow rounding: <code>round(x_k, y_k)</code>.</p>
+
+      <h3>2. Bresenham's Integer-Only Derivation ($0 \le m \le 1$):</h3>
+      <p>Given current pixel $(x_k, y_k)$, the next is either East $E(x_k+1, y_k)$ or North-East $NE(x_k+1, y_k+1)$.</p>
+      <p>The true line Y at $x_k+1$ is $y = m(x_k+1) + c$. The vertical distances are:</p>
+      <ul>
+        <li>$d_1 = y - y_k = m(x_k+1) + c - y_k$</li>
+        <li>$d_2 = (y_k+1) - y = y_k+1 - m(x_k+1) - c$</li>
+      </ul>
+      <p>Subtracting $d_2$ from $d_1$ and multiplying by $dx$ yields the decision variable $P_k$:</p>
+      <div class="math-box" style="text-align:center; font-family:var(--font-mono); font-size:0.85rem;">
+        P_k = dx(d_1 - d_2) = 2dy &middot; x_k - 2dx &middot; y_k + 2dy + dx(2c - 1)
+      </div>
+      <p>The recurrence relation is:</p>
+      <div class="math-box" style="text-align:center; font-family:var(--font-mono); font-size:0.85rem;">
+        P_{k+1} - P_k = 2dy - 2dx(y_{k+1} - y_k)
+      </div>
+      <ul>
+        <li><strong>If $P_k < 0$:</strong> Select East ($E$). $y_{k+1} = y_k$. Recurrence: <code>P_{k+1} = P_k + 2dy</code></li>
+        <li><strong>If $P_k \ge 0$:</strong> Select North-East ($NE$). $y_{k+1} = y_k + 1$. Recurrence: <code>P_{k+1} = P_k + 2dy - 2dx</code></li>
+        <li><strong>Initial Parameter:</strong> <code>P_0 = 2dy - dx</code></li>
+      </ul>
+    `
+  },
+  {
+    title: "4. Curves & Ellipses Derivations",
+    content: `
+      <h2>Midpoint Circle & Ellipse Derivations</h2>
+      <p>Curves are drawn by selecting grid coordinates closest to continuous equations using midpoint criteria.</p>
+      
+      <h3>1. Midpoint Circle Octant Derivation:</h3>
+      <p>Circle equation: $f(x,y) = x^2 + y^2 - R^2 = 0$. Starting at $(0, R)$ in the first octant ($0 \le x \le y$).</p>
+      <p>Next candidates: $E(x_k+1, y_k)$ and $SE(x_k+1, y_k-1)$. The midpoint is $M(x_k+1, y_k-0.5)$. We evaluate $f(M)$:</p>
+      <div class="math-box" style="text-align:center; font-family:var(--font-mono); font-size:0.85rem;">
+        P_k = f(x_k+1, y_k-0.5) = (x_k+1)^2 + (y_k-0.5)^2 - R^2
+      </div>
+      <ul>
+        <li><strong>If $P_k < 0$:</strong> Choose $E$. $y_{k+1} = y_k$. <code>P_{k+1} = P_k + 2x_{k+1} + 1</code></li>
+        <li><strong>If $P_k \ge 0$:</strong> Choose $SE$. $y_{k+1} = y_k - 1$. <code>P_{k+1} = P_k + 2x_{k+1} + 1 - 2y_{k+1}</code></li>
+        <li><strong>Initial Parameter:</strong> <code>P_0 = f(1, R-0.5) = 1 + (R-0.5)^2 - R^2 = 1.25 - R &asymp; 1 - R</code> (using integer boundaries)</li>
+      </ul>
+
+      <h3>2. Midpoint Ellipse Regions:</h3>
+      <p>Ellipse equation: $r_y^2 x^2 + r_x^2 y^2 - r_x^2 r_y^2 = 0$. Split into two regions at tangent slope $dy/dx = -1$.</p>
+      <ul>
+        <li><strong>Region 1 (Slope $> -1$):</strong> Steps along $x$. Decision parameter:
+          <br><code>P1_k = r_y^2(x_k+1)^2 + r_x^2(y_k-0.5)^2 - r_x^2 r_y^2</code>
+          <br><code>P1_0 = r_y^2 - r_x^2 r_y + 0.25 r_x^2</code>
+        </li>
+        <li><strong>Region 2 (Slope $\le -1$):</strong> Steps along $y$. Decision parameter:
+          <br><code>P2_k = r_y^2(x_k+0.5)^2 + r_x^2(y_k-1)^2 - r_x^2 r_y^2</code>
+        </li>
+      </ul>
+    `
+  },
+  {
+    title: "5. Thick Primitives & Filling",
+    content: `
+      <h2>Primitive Thickness & Polygon Filling</h2>
+      
+      <h3>1. Area Filling Concepts:</h3>
+      <ul class="slide-bullet-list">
+        <li><strong>Even-Odd Inside-Outside Test:</strong> Draw a ray from test point to infinity. Odd edge crossings = point is inside; Even crossings = point is outside.</li>
+        <li><strong>Boundary-Fill (Recursive):</strong> Floods pixels inside a region bounded by a single solid color. Checks 4-connected (top, bottom, left, right) or 8-connected (includes diagonals) neighbors.</li>
+        <li><strong>Flood-Fill:</strong> Replaces a specified background color with a fill color. Used when shape boundaries contain multiple colors.</li>
+      </ul>
+
+      <h3>2. Scan-Line Edge Table (ET) & Active Edge Table (AET):</h3>
+      <p>For rendering filled polygons efficiently, scanline algorithms do not test every pixel:</p>
+      <ol style="line-height:1.6; font-size:0.9rem;">
+        <li>Create the <strong>Edge Table (ET)</strong>: Contains all non-horizontal edges sorted by minimum Y coordinate ($y_{min}$). Each edge record stores $y_{max}$, starting $x$, and inverse slope $1/m$.</li>
+        <li>For each scanline $Y$, transfer edges from ET to the <strong>Active Edge Table (AET)</strong> where $Y \ge y_{min}$.</li>
+        <li>Sort AET by current $x$ coordinate.</li>
+        <li>Draw horizontal fill lines between odd and even pairs of AET edges (e.g. Edge 1 to Edge 2, Edge 3 to Edge 4).</li>
+        <li>Increment scanline $Y$. Remove edges from AET if $Y \ge y_{max}$, and update remaining X coordinates: $x_{new} = x + 1/m$.</li>
+      </ol>
+    `
+  },
+  {
+    title: "6. 2D Transformations",
+    content: `
+      <h2>Mathematical 2D Object Transformations</h2>
+      <p>All transformations modify coordinate geometry. Represented using matrix forms with Homogeneous Coordinates $(x, y, 1)$.</p>
+      
+      <div class="math-box" style="font-family:var(--font-mono); font-size:0.85rem;">
+        <p><strong>1. Translation (Shifting):</strong></p>
+        x' = x + t_x,   y' = y + t_y
+        <br>[x', y', 1]^T = [[1, 0, tx], [0, 1, ty], [0, 0, 1]] &middot; [x, y, 1]^T
+      </div>
+
+      <div class="math-box" style="font-family:var(--font-mono); font-size:0.85rem;">
+        <p><strong>2. Rotation (around origin):</strong></p>
+        x' = x&middot;cos&theta; - y&middot;sin&theta;,   y' = x&middot;sin&theta; + y&middot;cos&theta;
+        <br>[x', y', 1]^T = [[cos&theta;, -sin&theta;, 0], [sin&theta;, cos&theta;, 0], [0, 0, 1]] &middot; [x, y, 1]^T
+      </div>
+
+      <div class="math-box" style="font-family:var(--font-mono); font-size:0.85rem;">
+        <p><strong>3. Scaling (relative to origin):</strong></p>
+        x' = x &middot; s_x,   y' = y &middot; s_y
+        <br>[x', y', 1]^T = [[sx, 0, 0], [0, sy, 0], [0, 0, 1]] &middot; [x, y, 1]^T
+      </div>
+    `
+  }
+];
+
+const studyGuideDataCS = [
+  {
+    title: "1. Cybercrime Basics & Origins",
+    content: `
+      <h2>Cybercrime & CIA Triad</h2>
+      <p>Cybercrime represents any illegal activity utilizing digital device arrays as a target or tool.</p>
+      
+      <div class="info-callout">
+        <h4>Word Origins:</h4>
+        Coined from the Greek <em>Kybernetes</em> (governor/steersman). Norbert Wiener formulated <strong>Cybernetics</strong> in 1948 to analyze machine control channels. 'Cyber' represents the virtual interactive dimensions of networks.
+      </div>
+
+      <div class="info-callout" style="border-left-color:var(--accent-purple);">
+        <h4>Defense: Information Security (InfoSec) Goals</h4>
+        Defense centers on protecting the <strong>CIA Triad</strong>:
+        <ul>
+          <li><strong>Confidentiality:</strong> Preventing unauthorized data leaks (using encryption).</li>
+          <li><strong>Integrity:</strong> Ensuring data remains unaltered and accurate (using hashes).</li>
+          <li><strong>Availability:</strong> Ensuring resources are accessible when needed (redundancy/DDoS protection).</li>
+        </ul>
+      </div>
+
+      <div class="info-callout" style="border-left-color:var(--danger-color);">
+        <h4>Cybercriminals Classifications:</h4>
+        <ul>
+          <li><strong>Hackers:</strong> White hat (ethical), Black hat (crackers/malicious), Grey hat (unauthorized research).</li>
+          <li><strong>Script Kiddies:</strong> Amateurs executing attacks using pre-made scripts.</li>
+          <li><strong>Insider Threats:</strong> Employees abusing legitimate system access keys (highest operational risk).</li>
+          <li><strong>Cyber Terrorists:</strong> Attackers targeting national infrastructure (power, transit) to spread panic.</li>
+        </ul>
+      </div>
+    `
+  },
+  {
+    title: "2. Crimes Classifications",
+    content: `
+      <h2>Specific Cybercrime Classifications</h2>
+      <p>Unit-I maps key classifications of cyber attacks. Understand these definitions for theory questions:</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>1. E-Mail Spoofing</h4>
+          Altering headers to make an email appear to originate from a trusted sender. SMTP lacks native authentication, allowing header forgery.
+        </div>
+        <div class="info-callout" style="border-left-color:var(--accent-purple);">
+          <h4>2. Spamming</h4>
+          Sending unsolicited bulk emails. Clogs bandwidth, space, and serves as a vehicle for phishing links.
+        </div>
+      </div>
+
+      <div class="slide-grid-2">
+        <div class="info-callout" style="border-left-color:var(--warning-color);">
+          <h4>3. Salami Technique</h4>
+          Financial thefts shaving fractions of cents ($0.005) from thousands of transactions into a hacker account. Individual users miss the loss, hiding the crime.
+        </div>
+        <div class="info-callout" style="border-left-color:var(--danger-color);">
+          <h4>4. Data Diddling</h4>
+          Altering input data at the source *before* entry (e.g. changing price digits on registry slips).
+        </div>
+      </div>
+
+      <div class="info-callout">
+        <h4>5. Web Jacking & defacement</h4>
+        Hijacking DNS server records to redirect visitors to a clone page (phishing portal) or defacing the home content of a government site.
+      </div>
+    `
+  },
+  {
+    title: "3. Offense Planning Lifecycle",
+    content: `
+      <h2>How Criminals Plan Attacks</h2>
+      <p>Attacks are executed in structured stages. Gathering info is critical to exploiting systems.</p>
+      
+      <div class="math-box">
+        <p><strong>Reconnaissance (Information Gathering):</strong></p>
+        <ul>
+          <li><strong>Passive Reconnaissance:</strong> Snooping on the target indirectly without direct interaction (e.g. WHOIS lookups, DNS records harvest, scanning public database indices).</li>
+          <li><strong>Active Reconnaissance:</strong> Interacting directly with the target to find open gates (e.g. port scanning, ping sweeps, banner grabbing to identify OS and patch numbers).</li>
+        </ul>
+      </div>
+
+      <div class="info-callout" style="border-left-color:var(--accent-purple);">
+        <h4>Passive vs. Active Attacks:</h4>
+        <ul>
+          <li><strong>Passive Attacks:</strong> Capture network data without modifying assets (e.g. packet sniffing, traffic analysis). Breaks <em>Confidentiality</em>.</li>
+          <li><strong>Active Attacks:</strong> Modify system configurations, insert malware, or block service availability (e.g. SQL Injections, MitM packet manipulation, DDoS floods). Breaks <em>Integrity</em> and <em>Availability</em>.</li>
+        </ul>
+      </div>
+    `
+  },
+  {
+    title: "4. Shared Spaces & Cloud Vulnerability",
+    content: `
+      <h2>Shared Environments Risk Vectors</h2>
+      <p>Shared cafes and cloud server networks present different security challenges.</p>
+      
+      <div class="slide-grid-2">
+        <div class="info-callout">
+          <h4>Cybercafe Risks:</h4>
+          <ul>
+            <li><strong>Hardware Keyloggers:</strong> USB interceptors plugged between keyboard and PC to record passwords.</li>
+            <li><strong>Session Hijacking:</strong> Scraped browser cookies allow subsequent customers to bypass login panels.</li>
+            <li><strong>Insecure Routers:</strong> Cafe routers often lack traffic isolation, enabling passive sniffing.</li>
+          </ul>
+        </div>
+        <div class="info-callout" style="border-left-color:var(--accent-purple);">
+          <h4>Cloud Computing Risks:</h4>
+          <ul>
+            <li><strong>Shared Responsibility Model:</strong> Cloud provider secures hardware, but user is responsible for container configuration.</li>
+            <li><strong>API Hijacking:</strong> Vulnerabilities in cloud administrative interfaces.</li>
+            <li><strong>Hypervisor escapes:</strong> Exploits allowing a guest VM to access the underlying host OS or adjacent tenant containers.</li>
+          </ul>
+        </div>
+      </div>
+    `
+  },
+  {
+    title: "5. Mobile Devices & Card Frauds",
+    content: `
+      <h2>Mobile Security & Card Fraud</h2>
+      
+      <h3>1. Mobile Security Challenges:</h3>
+      <p>Smartphone proliferation increases corporate exposure via:</p>
+      <ul>
+        <li><strong>BYOD (Bring Your Own Device):</strong> Blending personal apps with corporate networks.</li>
+        <li><strong>Unencrypted Cache:</strong> Apps saving access tokens locally in plain text SQLite databases.</li>
+        <li><strong>OS Jailbreaking/Rooting:</strong> Disabling OS sandboxing policies.</li>
+      </ul>
+
+      <h3>2. Credit Card Fraud Types:</h3>
+      <ul class="slide-bullet-list">
+        <li><strong>CNP (Card-Not-Present) Fraud:</strong> Online checkouts where physical swipe is not required. Attackers use card metadata harvested from database hacks or phishing.</li>
+        <li><strong>RFID Skimming:</strong> Handheld scanners intercepting card chip details wirelessly in close public proximity.</li>
+        <li><strong>Keyloggers:</strong> Malware recording touch screen inputs to steal card credentials.</li>
+      </ul>
+    `
+  },
+  {
+    title: "6. Mobile Registry & MDM Policies",
+    content: `
+      <h2>Registry Hardening & Enterprise Policies</h2>
+      <p>Hardening mobile systems involves editing configurations and enforcing MDM controls.</p>
+      
+      <div class="math-box">
+        <p><strong>Registry Hardening Keys (Windows Mobile):</strong></p>
+        1. Bluetooth discoverable toggle (Set to 0 to block scanner scans):
+        <br><code>HKLM\\Comm\\Conn\\BT: Discoverable = 0</code>
+        <br>2. Force password lock on screen wake:
+        <br><code>HKLM\\Security\\Policies: PasswordRequired = 1</code>
+        <br>3. Block unsigned CAB installations (Prevent malware cabinet execution):
+        <br><code>HKLM\\Security\\Policies: BlockUnsignedCAB = 1</code>
+      </div>
+
+      <div class="info-callout" style="border-left-color:var(--success-color);">
+        <h4>Enterprise Management Policies:</h4>
+        <ul>
+          <li><strong>MDM (Mobile Device Management):</strong> Software forcing password complexity, device tracking, and remote wipe configurations.</li>
+          <li><strong>Containerization:</strong> Separating corporate data into encrypted storage profiles.</li>
+          <li><strong>Laptop Security:</strong> Full-disk encryption (BitLocker), disabling boot key options, and requiring VPN tunnels.</li>
+        </ul>
+      </div>
+    `
+  }
+];
+
+function initStudyGuide() {
+  const guideListNav = document.getElementById('studyguide-list-nav');
+  const readerContent = document.getElementById('studyguide-reader-content');
+  
+  let activeGuideIdx = 0;
+  const guideData = activeSubject === 'cg' ? studyGuideDataCG : studyGuideDataCS;
+  
+  // Render Sidebar
+  guideListNav.innerHTML = '';
+  guideData.forEach((chapter, index) => {
+    const li = document.createElement('li');
+    const button = document.createElement('button');
+    button.className = `slide-nav-item study-nav-item ${index === 0 ? 'active' : ''}`;
+    button.innerHTML = `<span class="slide-num">${String(index + 1).padStart(2, '0')}</span> ${chapter.title}`;
+    button.addEventListener('click', () => {
+      loadChapter(index);
+    });
+    li.appendChild(button);
+    guideListNav.appendChild(li);
+  });
+  
+  // Load initial chapter
+  loadChapter(0);
+  
+  function loadChapter(index) {
+    if (index < 0 || index >= guideData.length) return;
+    activeGuideIdx = index;
+    
+    // Render content
+    readerContent.innerHTML = guideData[index].content;
+    
+    // Highlight sidebar
+    const items = guideListNav.querySelectorAll('.study-nav-item');
+    items.forEach((btn, idx) => {
+      if (idx === index) {
+        btn.classList.add('active');
+        btn.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+  
+  // Expose globally
+  window.refreshStudyGuide = () => {
+    initStudyGuide();
+  };
 }
 
 // ==========================================
@@ -3910,5 +4325,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initVisualizer();
   initCPrograms();
   initCsThreatSimulators(); // Register cyber security visualizer simulations
+  initStudyGuide(); // Register study guide textbook renderer
 });
+
 
